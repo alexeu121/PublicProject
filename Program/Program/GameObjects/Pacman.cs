@@ -19,15 +19,13 @@ namespace Program.GameObjects
             IsEnabled = true;
 
             Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);
-
-            //Animation.Location = new Coordinate(5, 21);    //start position
         }
 
 
 
         public void Collide(IEnumerable<IGameObject> collisions)
         {
-            foreach (var obj in collisions)
+            foreach (var obj in collisions)     //pacman can eat only coins
                 if((obj.Name != "Pinky") && (obj.Name != "Blinky") && (obj.Name != "Inky") && (obj.Name != "Clyde"))
                     obj.IsEnabled = false;
 

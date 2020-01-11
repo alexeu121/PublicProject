@@ -24,6 +24,7 @@ namespace Program
     class PointData
     {
         public Coordinate coord { get; set; }
+
         public InitialData InitData { get; set; }   //properties for initial objects
 
     }
@@ -55,9 +56,9 @@ namespace Program
 
             List<IGameObject> objectCol = new List<IGameObject>();
 
+            objectCol.Add(BaseGameObject.CreateStaticObject(AnimationType.MazeBlue, 0, 0));
 
-            objectCol.Add(BaseGameObject.CreateStaticObject(AnimationType.MazeWhite, 0, 0));
-            //objectCol.AddRange(InitData.Select(CreateObject).Where(x => x != null));
+            objectCol.AddRange(InitData.Select(CreateObject).Where(x => x != null));
 
 
             return objectCol;
