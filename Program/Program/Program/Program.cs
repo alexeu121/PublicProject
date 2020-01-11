@@ -73,14 +73,29 @@ namespace Program
                     result = new Pacman();
                     result.Animation.Location = pt.coord;
                     break;
+                case InitialData.Blinky:
+                    result = new Ghost("Blinky");
+                    result.Animation.Location = pt.coord;
+                    break;
+                case InitialData.Pinky:
+                    result = new Ghost("Pinky");
+                    result.Animation.Location = pt.coord;
+                    break;
+                case InitialData.Inky:
+                    result = new Ghost("Inky");
+                    result.Animation.Location = pt.coord;
+                    break;
+                case InitialData.Clyde:
+                    result = new Ghost("Clyde");
+                    result.Animation.Location = pt.coord;
+                    break;
                 case InitialData.BigCoin:
                     BaseGameObject.CreateStaticObject(AnimationType.BigCoin, pt.coord.X, pt.coord.Y);
                     break;
                 case InitialData.SmallCoin:
                     BaseGameObject.CreateStaticObject(AnimationType.SmallCoin, pt.coord.X, pt.coord.Y);
                     break;
-                case InitialData.Wall:
-                    BaseGameObject.CreateStaticObject(AnimationType.MazeBlue)
+                
             }
             return result;
         }

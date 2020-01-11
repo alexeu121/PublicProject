@@ -28,7 +28,8 @@ namespace Program.GameObjects
         public void Collide(IEnumerable<IGameObject> collisions)
         {
             foreach (var obj in collisions)
-                obj.IsEnabled = false;
+                if((obj.Name != "Pinky") && (obj.Name != "Blinky") && (obj.Name != "Inky") && (obj.Name != "Clyde"))
+                    obj.IsEnabled = false;
 
         }
 
@@ -83,6 +84,16 @@ namespace Program.GameObjects
                     Animation.Location += new Coordinate(0, Speed);
                     break;
             }
+
+            //if (Animation.Location.X == 0)
+            //    Animation.Location = new Coordinate(Animation.Location.X + 21f, Animation.Location.Y);
+            //else if (Animation.Location.X == 21)
+            //    Animation.Location = new Coordinate(Animation.Location.X - 21f, Animation.Location.Y);
+
+            //if (Animation.Location.Y == 0)
+            //    Animation.Location = new Coordinate(Animation.Location.X, Animation.Location.Y + 27f);
+            //else if (Animation.Location.Y == 27)
+            //    Animation.Location = new Coordinate(Animation.Location.X, Animation.Location.Y - 27f);
         }
     }
 }
