@@ -56,8 +56,8 @@ namespace Program
             List<IGameObject> objectCol = new List<IGameObject>();
 
 
-            objectCol.Add(BaseGameObject.CreateStaticObject(AnimationType.MazeBlue, 0, 0));
-            objectCol.AddRange(InitData.Select(CreateObject).Where(x => x != null));
+            objectCol.Add(BaseGameObject.CreateStaticObject(AnimationType.MazeWhite, 0, 0));
+            //objectCol.AddRange(InitData.Select(CreateObject).Where(x => x != null));
 
 
             return objectCol;
@@ -90,10 +90,10 @@ namespace Program
                     result.Animation.Location = pt.coord;
                     break;
                 case InitialData.BigCoin:
-                    BaseGameObject.CreateStaticObject(AnimationType.BigCoin, pt.coord.X, pt.coord.Y);
+                    result = BaseGameObject.CreateStaticObject(AnimationType.BigCoin, pt.coord.X, pt.coord.Y);
                     break;
                 case InitialData.SmallCoin:
-                    BaseGameObject.CreateStaticObject(AnimationType.SmallCoin, pt.coord.X, pt.coord.Y);
+                    result = BaseGameObject.CreateStaticObject(AnimationType.SmallCoin, pt.coord.X, pt.coord.Y);
                     break;
                 
             }
