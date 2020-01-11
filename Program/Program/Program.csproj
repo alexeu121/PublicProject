@@ -67,9 +67,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameObjects\BaseGameObject.cs" />
-    <Compile Include="GameObjects\MazeBlue.cs" />
+    <Compile Include="GameObjects\Ghost.cs" />
     <Compile Include="GameObjects\Pacman.cs" />
-    <Compile Include="GameObjects\SmallCoin.cs" />
     <Compile Include="Program\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

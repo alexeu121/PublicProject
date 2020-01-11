@@ -46,19 +46,21 @@ namespace Program
                 )).
                 SelectMany(x => x).ToArray();
 
-            var Grid = new bool[21, 27];    //grid for data from App.Config file
+            var Grid = new bool[21, 27];        //grid for data from App.Config file
 
-            foreach (var dat in InitData)   //find where is a walls of maze
+            foreach (var dat in InitData)       //find where is a walls of maze
             {
                 Grid[(int)dat.coord.X, (int)dat.coord.Y] = dat.InitData != InitialData.Wall;
             }
 
-            var col1 = new List<IGameObject>();
+            List<IGameObject> objectCol = new List<IGameObject>();
 
 
-            col1.Add(BaseGameObject.CreateStaticObject(AnimationType.MazeBlue, 0, 0));
-            col1.AddRange(InitData.Select(CreateObject).Where(x => x != null));
-            return col1;
+            objectCol.Add(BaseGameObject.CreateStaticObject(AnimationType.MazeBlue, 0, 0));
+            objectCol.AddRange(InitData.Select(CreateObject).Where(x => x != null));
+
+
+            return objectCol;
         }
 
         static BaseGameObject CreateObject(PointData pt)
@@ -77,6 +79,8 @@ namespace Program
                 case InitialData.SmallCoin:
                     BaseGameObject.CreateStaticObject(AnimationType.SmallCoin, pt.coord.X, pt.coord.Y);
                     break;
+                case InitialData.Wall:
+                    BaseGameObject.CreateStaticObject(AnimationType.MazeBlue)
             }
             return result;
         }

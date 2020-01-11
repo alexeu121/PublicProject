@@ -10,7 +10,7 @@ namespace Program.GameObjects
         public DirectionKeys PressedKeys { get; set; }
 
         private DirectionKeys CurrentDirection = DirectionKeys.None;
-        public float Speed { get; set; } = 0.1f;    //1 cell = 16 pix // 21 na 27 kletok
+        public float Speed { get; set; } = 0.1f;    //1 cell = 16 pix // 21 x 27 cells
 
         public Pacman()    //constructor
         {
