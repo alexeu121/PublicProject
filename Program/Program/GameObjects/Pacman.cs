@@ -10,9 +10,9 @@ namespace Program.GameObjects
         public DirectionKeys PressedKeys { get; set; }
 
         private DirectionKeys CurrentDirection = DirectionKeys.None;
-        public float Speed { get; set; } = 0.1f;    //1 kletka = 16 pix // 21 na 27 kletok
+        public float Speed { get; set; } = 0.1f;    //1 cell = 16 pix // 21 na 27 kletok
 
-        public Pacman()    //конструктор класса
+        public Pacman()    //constructor
         {
             Name = "Pacman";
 
@@ -20,7 +20,7 @@ namespace Program.GameObjects
 
             Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);
 
-            Animation.Location = new Coordinate(10, 10);    //стартовая позиция пакмана
+            //Animation.Location = new Coordinate(5, 21);    //start position
         }
 
 
@@ -45,7 +45,7 @@ namespace Program.GameObjects
             else if ((PressedKeys & DirectionKeys.Down) == DirectionKeys.Down)
                 NewDirection = DirectionKeys.Down;
 
-            if (CurrentDirection != NewDirection && NewDirection != DirectionKeys.None)
+            if (CurrentDirection != NewDirection && NewDirection != DirectionKeys.None) //change the direction of watching
             {
                 Animation newAnimation;
                 switch (NewDirection)
@@ -68,7 +68,7 @@ namespace Program.GameObjects
                 CurrentDirection = NewDirection;
             }
 
-            switch (CurrentDirection)
+            switch (CurrentDirection)   //change the direction of going
             {
                 case DirectionKeys.Left:
                     Animation.Location -= new Coordinate(Speed, 0);

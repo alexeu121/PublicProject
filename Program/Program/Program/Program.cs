@@ -24,7 +24,7 @@ namespace Program
     class PointData
     {
         public Coordinate coord { get; set; }
-        public InitialData InitData { get; set; }   //dannye for init objects
+        public InitialData InitData { get; set; }   //properties for initial objects
 
     }
 
@@ -32,42 +32,37 @@ namespace Program
     {
         static void Main(string[] args)
         {
-            Engine.Run(InitCollection()); //при загрузке передаем обьекты для отображения и обработки
+            Engine.Run(InitCollection());           //when load, transmit collection of objects for show and processing
         }
         private static IEnumerable<IGameObject> InitCollection()
         {
 
             var mazeData = ConfigurationManager.AppSettings["MazeData"];
 
-            PointData[] InitData = mazeData.Split(' '). //deserialize stroki
+            PointData[] InitData = mazeData.Split(' ').                                 //deserialization
                 Select(x => x.Select(y => int.Parse(y.ToString())).ToArray()).
                 Select((arr, Y) =>
                 arr.Select((Number, X) => new PointData() { coord = new Coordinate(X, Y), InitData = (InitialData)Number }
                 )).
                 SelectMany(x => x).ToArray();
 
-            //27 strok s 21 simvolov v kazhdoy
+            var Grid = new bool[21, 27];    //grid for data from App.Config file
 
-            var Grid = new bool[21, 27];
-
-            foreach (var dat in InitData)
+            foreach (var dat in InitData)   //find where is a walls of maze
             {
                 Grid[(int)dat.coord.X, (int)dat.coord.Y] = dat.InitData != InitialData.Wall;
             }
 
             var col1 = new List<IGameObject>();
 
-           
-            col1.Add(BaseGameObject.CreateStaticObject(AnimationType.MazeBlue, 0, 0));
-            col1.Add(BaseGameObject.CreateStaticObject(AnimationType.PacmanRight, 10, 10));
 
+            col1.Add(BaseGameObject.CreateStaticObject(AnimationType.MazeBlue, 0, 0));
             col1.AddRange(InitData.Select(CreateObject).Where(x => x != null));
             return col1;
         }
 
         static BaseGameObject CreateObject(PointData pt)
         {
-
             BaseGameObject result = null;
 
             switch (pt.InitData)
@@ -78,14 +73,10 @@ namespace Program
                     break;
                 case InitialData.BigCoin:
                     BaseGameObject.CreateStaticObject(AnimationType.BigCoin, pt.coord.X, pt.coord.Y);
-
                     break;
                 case InitialData.SmallCoin:
                     BaseGameObject.CreateStaticObject(AnimationType.SmallCoin, pt.coord.X, pt.coord.Y);
-
                     break;
-
-
             }
             return result;
         }
