@@ -59,6 +59,7 @@ namespace Program
 
            
             col1.Add(BaseGameObject.CreateStaticObject(AnimationType.MazeBlue, 0, 0));
+            col1.Add(BaseGameObject.CreateStaticObject(AnimationType.PacmanRight, 10, 10));
 
             col1.AddRange(InitData.Select(CreateObject).Where(x => x != null));
             return col1;

@@ -5,7 +5,7 @@ using PacmanEngine.Components.Graphics;
 
 namespace Program.GameObjects
 {
-    class Pacman : BaseGameObject//BaseGameObject, IProtagonist
+    class Pacman : BaseGameObject, IProtagonist
     {
         public DirectionKeys PressedKeys { get; set; }
 
