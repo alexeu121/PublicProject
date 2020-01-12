@@ -14,9 +14,9 @@ namespace Program.GameObjects
 
         public int Speed { get; set; } = 100000;    //1 cell = 16 pix // 21 x 27 cells
 
-        public bool[,] GridOfWalls;
+        public bool[,] Grid;
 
-        public Pacman()    //constructor
+        public Pacman(bool[,] GridOfWalls)    //constructor
         {
             Name = "Pacman";
 
@@ -24,7 +24,7 @@ namespace Program.GameObjects
 
             Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);
 
-            GridOfWalls = new bool[21, 27];
+            Grid = GridOfWalls;
         }
 
 
@@ -32,14 +32,13 @@ namespace Program.GameObjects
         public void Collide(IEnumerable<IGameObject> collisions)
         {
             foreach (var obj in collisions)     //pacman can eat only coins
-                if((obj.Name == "SmallCoin") || (obj.Name == "BigCoin"))
-                    obj.IsEnabled = false;
+                obj.IsEnabled = false;
+            //if((obj.Name == "SmallCoin") || (obj.Name == "BigCoin"))
+            
         }
 
         public virtual void Update()
         {
-            
-
             DirectionKeys NewDirection = DirectionKeys.None;
 
             //find new pressed key of direction
@@ -78,7 +77,9 @@ namespace Program.GameObjects
             switch (CurrentDirection)   //change the direction of going
             {
                 case DirectionKeys.Left:
-                    Animation.Location -= new Coordinate(Speed, 0);
+                    bool isWall = Grid[((Animation.Location.X / Coordinate.Multiplier) - 1), Animation.Location.Y / Coordinate.Multiplier];
+                    if (!isWall)
+                        Animation.Location -= new Coordinate(Speed, 0);
                     break;
                 case DirectionKeys.Right:
                     Animation.Location += new Coordinate(Speed, 0);

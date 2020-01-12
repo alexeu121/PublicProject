@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Program.GameObjects;
-using System.Collections.Generic;
 using PacmanEngine.Components.Actors;
 using PacmanEngine.Components.Base;
 using PacmanEngine.Components.Graphics;
 
 namespace Program.MapGrid
 {
-    public static class GridWalls
+    public class GridWalls
     {
         public static bool[,] Grid;
 
@@ -24,7 +23,5 @@ namespace Program.MapGrid
             //    Grid[(int)dat.coord.X / Coordinate.Multiplier, (int)dat.coord.Y / Coordinate.Multiplier] = dat.InitData != InitialData.Wall;    //true - road, false - wall
             //}
         }
-
-        static 
-}
+    }
 }

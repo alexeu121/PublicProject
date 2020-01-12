@@ -32,6 +32,9 @@ namespace Program
 
     class Program
     {
+
+        static bool[,] Grid = new bool[21, 27];        //grid for walls, data from App.Config file
+
         static void Main(string[] args)
         {
             Engine.Run(InitCollection());           //when load, transmit collection of objects for show and processing
@@ -49,7 +52,7 @@ namespace Program
                 SelectMany(x => x).ToArray();
 
 
-            bool[,] Grid = new bool[21, 27];        //grid for walls, data from App.Config file
+            
 
             foreach (var dat in InitData)       //find where is a walls of maze
             {
@@ -76,7 +79,7 @@ namespace Program
             switch (pt.InitData)
             {
                 case InitialData.Pacman:
-                    result = new Pacman();
+                    result = new Pacman(Grid);
                     result.Animation.Location = pt.coord;
                     break;
                 case InitialData.Blinky:
