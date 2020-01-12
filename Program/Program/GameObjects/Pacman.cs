@@ -77,8 +77,8 @@ namespace Program.GameObjects
             switch (CurrentDirection)   //change the direction of going
             {
                 case DirectionKeys.Left:
-                    bool isWall = Grid[((Animation.Location.X / Coordinate.Multiplier) - 1), Animation.Location.Y / Coordinate.Multiplier];
-                    if (!isWall)
+                    //bool isWall = Grid[((Animation.Location.X / Coordinate.Multiplier) - 1), Animation.Location.Y / Coordinate.Multiplier];
+                   
                         Animation.Location -= new Coordinate(Speed, 0);
                     break;
                 case DirectionKeys.Right:
@@ -94,13 +94,13 @@ namespace Program.GameObjects
 
             //cross the walls on x coordinates
             if ((Animation.Location.X == 0) && (CurrentDirection == DirectionKeys.Left))
-                Animation.Location = new Coordinate(21000000, Animation.Location.Y);
-            else if ((Animation.Location.X == 21000000) && (CurrentDirection == DirectionKeys.Right))
+                Animation.Location = new Coordinate(21*Coordinate.Multiplier, Animation.Location.Y);
+            else if ((Animation.Location.X == 21*Coordinate.Multiplier) && (CurrentDirection == DirectionKeys.Right))
                 Animation.Location = new Coordinate(0, Animation.Location.Y);
 
             if ((Animation.Location.Y == 0) && (CurrentDirection == DirectionKeys.Up))
-                Animation.Location = new Coordinate(Animation.Location.X, 27000000);
-            else if ((Animation.Location.Y == 27000000) && (CurrentDirection == DirectionKeys.Down))
+                Animation.Location = new Coordinate(Animation.Location.X, 27*Coordinate.Multiplier);
+            else if ((Animation.Location.Y == 27*Coordinate.Multiplier) && (CurrentDirection == DirectionKeys.Down))
                 Animation.Location = new Coordinate(Animation.Location.X , 0);
         }
     }

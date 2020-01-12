@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using PacmanEngine.Components.Actors;
@@ -56,7 +57,8 @@ namespace Program
 
             foreach (var dat in InitData)       //find where is a walls of maze
             {
-                Grid[(int)dat.coord.X / Coordinate.Multiplier, (int)dat.coord.Y / Coordinate.Multiplier] = dat.InitData != InitialData.Wall;    //true - road, false - wall
+                Grid[(uint)dat.coord.X / Coordinate.Multiplier, (uint)dat.coord.Y / Coordinate.Multiplier] = dat.InitData != InitialData.Wall;    //true - road, false - wall
+
             }
             //create single static class, give access for pacman to this class with GridWalls
 
