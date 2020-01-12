@@ -10,7 +10,7 @@ namespace Program.GameObjects
         public bool IsEnabled { get; set; } = true;//по умолчанию включен
         public Animation Animation { get; set; }
 
-        public static BaseGameObject CreateStaticObject(AnimationType type, float xPos, float yPos)
+        public static BaseGameObject CreateStaticObject(AnimationType type, int xPos, int yPos)
         {
             BaseGameObject result = null;
 

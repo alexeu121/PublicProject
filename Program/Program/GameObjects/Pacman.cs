@@ -12,7 +12,7 @@ namespace Program.GameObjects
 
         private DirectionKeys CurrentDirection = DirectionKeys.None;
 
-        public float Speed { get; set; } = 0.1f;    //1 cell = 16 pix // 21 x 27 cells
+        public int Speed { get; set; } = 100000;    //1 cell = 16 pix // 21 x 27 cells
 
         public Pacman()    //constructor
         {
@@ -30,7 +30,6 @@ namespace Program.GameObjects
             foreach (var obj in collisions)     //pacman can eat only coins
                 if((obj.Name == "SmallCoin") || (obj.Name == "BigCoin"))
                     obj.IsEnabled = false;
-
         }
 
         public virtual void Update()
@@ -88,16 +87,14 @@ namespace Program.GameObjects
 
             //cross the walls on x coordinates
             if ((Animation.Location.X <= 0.3f) && (Animation.Location.X >= -0.3f) && (CurrentDirection == DirectionKeys.Left))
-                Animation.Location = new Coordinate(Animation.Location.X + 21f, Animation.Location.Y);
-
-            if ((Animation.Location.X <= 21.3f) && (Animation.Location.X >= 20.7f) && (CurrentDirection == DirectionKeys.Right))
-                Animation.Location = new Coordinate(Animation.Location.X - 21f, Animation.Location.Y);
+                Animation.Location = new Coordinate(Animation.Location.X + 21000000, Animation.Location.Y);
+            else if ((Animation.Location.X <= 21.3f) && (Animation.Location.X >= 20.7f) && (CurrentDirection == DirectionKeys.Right))
+                Animation.Location = new Coordinate(Animation.Location.X - 21000000, Animation.Location.Y);
 
             if ((Animation.Location.Y <= 0.3f) && (Animation.Location.Y >= -0.3f) && (CurrentDirection == DirectionKeys.Up))
-                Animation.Location = new Coordinate(Animation.Location.X, Animation.Location.Y + 27f);
-
-            if ((Animation.Location.Y <= 27.3f) && (Animation.Location.Y >= 26.7f) && (CurrentDirection == DirectionKeys.Down))
-                Animation.Location = new Coordinate(Animation.Location.X , Animation.Location.Y - 27f);
+                Animation.Location = new Coordinate(Animation.Location.X, Animation.Location.Y + 27000000);
+            else if ((Animation.Location.Y <= 27.3f) && (Animation.Location.Y >= 26.7f) && (CurrentDirection == DirectionKeys.Down))
+                Animation.Location = new Coordinate(Animation.Location.X , Animation.Location.Y - 27000000);
         }
     }
 }
