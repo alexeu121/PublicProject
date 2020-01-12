@@ -69,6 +69,7 @@
     <Compile Include="GameObjects\BaseGameObject.cs" />
     <Compile Include="GameObjects\Ghost.cs" />
     <Compile Include="GameObjects\Pacman.cs" />
+    <Compile Include="MapGrid\GridWalls.cs" />
     <Compile Include="Program\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

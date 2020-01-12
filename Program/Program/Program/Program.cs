@@ -5,6 +5,7 @@ using PacmanEngine.Components.Actors;
 using PacmanEngine.Components.Base;
 using PacmanEngine.Components.Graphics;
 using Program.GameObjects;
+using Program.MapGrid;
 
 namespace Program
 {
@@ -47,14 +48,16 @@ namespace Program
                 )).
                 SelectMany(x => x).ToArray();
 
-            var GridWalls = new bool[21, 27];        //grid for walls, data from App.Config file
+
+            bool[,] Grid = new bool[21, 27];        //grid for walls, data from App.Config file
 
             foreach (var dat in InitData)       //find where is a walls of maze
             {
-                GridWalls[(int)dat.coord.X / Coordinate.Multiplier, (int)dat.coord.Y / Coordinate.Multiplier] = dat.InitData != InitialData.Wall;    //true - road, false - wall
-            }   
-            
+                Grid[(int)dat.coord.X / Coordinate.Multiplier, (int)dat.coord.Y / Coordinate.Multiplier] = dat.InitData != InitialData.Wall;    //true - road, false - wall
+            }
             //create single static class, give access for pacman to this class with GridWalls
+
+
 
             List<IGameObject> objectCol = new List<IGameObject>();
 

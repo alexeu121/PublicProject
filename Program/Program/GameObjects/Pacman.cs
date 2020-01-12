@@ -14,6 +14,8 @@ namespace Program.GameObjects
 
         public int Speed { get; set; } = 100000;    //1 cell = 16 pix // 21 x 27 cells
 
+        public bool[,] GridOfWalls;
+
         public Pacman()    //constructor
         {
             Name = "Pacman";
@@ -21,6 +23,8 @@ namespace Program.GameObjects
             IsEnabled = true;
 
             Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);
+
+            GridOfWalls = new bool[21, 27];
         }
 
 
@@ -34,6 +38,8 @@ namespace Program.GameObjects
 
         public virtual void Update()
         {
+            
+
             DirectionKeys NewDirection = DirectionKeys.None;
 
             //find new pressed key of direction
@@ -86,15 +92,15 @@ namespace Program.GameObjects
             }
 
             //cross the walls on x coordinates
-            if ((Animation.Location.X <= 300000) && (Animation.Location.X >= -300000) && (CurrentDirection == DirectionKeys.Left))
-                Animation.Location = new Coordinate(Animation.Location.X + 21000000, Animation.Location.Y);
-            else if ((Animation.Location.X <= 21.300000) && (Animation.Location.X >= 20700000) && (CurrentDirection == DirectionKeys.Right))
-                Animation.Location = new Coordinate(Animation.Location.X - 21000000, Animation.Location.Y);
+            if ((Animation.Location.X == 0) && (CurrentDirection == DirectionKeys.Left))
+                Animation.Location = new Coordinate(21000000, Animation.Location.Y);
+            else if ((Animation.Location.X == 21000000) && (CurrentDirection == DirectionKeys.Right))
+                Animation.Location = new Coordinate(0, Animation.Location.Y);
 
-            if ((Animation.Location.Y <= 300000) && (Animation.Location.Y >= -300000) && (CurrentDirection == DirectionKeys.Up))
-                Animation.Location = new Coordinate(Animation.Location.X, Animation.Location.Y + 27000000);
-            else if ((Animation.Location.Y <= 27300000) && (Animation.Location.Y >= 26700000) && (CurrentDirection == DirectionKeys.Down))
-                Animation.Location = new Coordinate(Animation.Location.X , Animation.Location.Y - 27000000);
+            if ((Animation.Location.Y == 0) && (CurrentDirection == DirectionKeys.Up))
+                Animation.Location = new Coordinate(Animation.Location.X, 27000000);
+            else if ((Animation.Location.Y == 27000000) && (CurrentDirection == DirectionKeys.Down))
+                Animation.Location = new Coordinate(Animation.Location.X , 0);
         }
     }
 }
