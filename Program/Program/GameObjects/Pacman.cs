@@ -37,7 +37,7 @@ namespace Program.GameObjects
             DirectionKeys NewDirection = DirectionKeys.None;
 
             //find new pressed key of direction
-            if (((PressedKeys & DirectionKeys.Left) == DirectionKeys.Left) && (Animation.Location.X % 1 == 0) && (Animation.Location.Y % 1 == 0))           
+            if (((PressedKeys & DirectionKeys.Left) == DirectionKeys.Left) /*&& (Animation.Location.X % 1 == 0) && (Animation.Location.Y % 1 == 0)*/)           
                 NewDirection = DirectionKeys.Left;
             else if ((PressedKeys & DirectionKeys.Right) == DirectionKeys.Right)
                 NewDirection = DirectionKeys.Right;
@@ -86,14 +86,14 @@ namespace Program.GameObjects
             }
 
             //cross the walls on x coordinates
-            if ((Animation.Location.X <= 0.3f) && (Animation.Location.X >= -0.3f) && (CurrentDirection == DirectionKeys.Left))
+            if ((Animation.Location.X <= 300000) && (Animation.Location.X >= -300000) && (CurrentDirection == DirectionKeys.Left))
                 Animation.Location = new Coordinate(Animation.Location.X + 21000000, Animation.Location.Y);
-            else if ((Animation.Location.X <= 21.3f) && (Animation.Location.X >= 20.7f) && (CurrentDirection == DirectionKeys.Right))
+            else if ((Animation.Location.X <= 21.300000) && (Animation.Location.X >= 20700000) && (CurrentDirection == DirectionKeys.Right))
                 Animation.Location = new Coordinate(Animation.Location.X - 21000000, Animation.Location.Y);
 
-            if ((Animation.Location.Y <= 0.3f) && (Animation.Location.Y >= -0.3f) && (CurrentDirection == DirectionKeys.Up))
+            if ((Animation.Location.Y <= 300000) && (Animation.Location.Y >= -300000) && (CurrentDirection == DirectionKeys.Up))
                 Animation.Location = new Coordinate(Animation.Location.X, Animation.Location.Y + 27000000);
-            else if ((Animation.Location.Y <= 27.3f) && (Animation.Location.Y >= 26.7f) && (CurrentDirection == DirectionKeys.Down))
+            else if ((Animation.Location.Y <= 27300000) && (Animation.Location.Y >= 26700000) && (CurrentDirection == DirectionKeys.Down))
                 Animation.Location = new Coordinate(Animation.Location.X , Animation.Location.Y - 27000000);
         }
     }

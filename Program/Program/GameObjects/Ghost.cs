@@ -7,7 +7,7 @@ namespace Program.GameObjects
     class Ghost : BaseGameObject
     {
 
-        public float Speed { get; set; } = 0.1f;
+        public float Speed { get; set; } = 100000;
 
         public Ghost(string inpName)
         {
@@ -18,7 +18,7 @@ namespace Program.GameObjects
                     case "Blinky":
                         Name = "Blinky";
                         Animation = AnimationFactory.CreateAnimation(AnimationType.BlinkyRight);
-                        Speed = 0.07f;
+                        Speed = 70000;
                         break;
                     case "Pinky":
                         Name = "Pinky";
@@ -27,7 +27,7 @@ namespace Program.GameObjects
                     case "Inky":
                         Name = "Inky";
                         Animation = AnimationFactory.CreateAnimation(AnimationType.InkyRight);
-                        Speed = 0.08f;
+                        Speed = 80000;
                         break;
                     case "Clyde":
                         Name = "Clyde";

@@ -43,7 +43,7 @@ namespace Program
             PointData[] InitData = mazeData.Split(' ').                                 //deserialization
                 Select(x => x.Select(y => int.Parse(y.ToString())).ToArray()).
                 Select((arr, Y) =>
-                arr.Select((Number, X) => new PointData() { coord = new Coordinate(X, Y), InitData = (InitialData)Number }
+                arr.Select((Number, X) => new PointData() { coord = new Coordinate(X * Coordinate.Multiplier, Y * Coordinate.Multiplier), InitData = (InitialData)Number }
                 )).
                 SelectMany(x => x).ToArray();
 
@@ -51,8 +51,10 @@ namespace Program
 
             foreach (var dat in InitData)       //find where is a walls of maze
             {
-                GridWalls[(int)dat.coord.X, (int)dat.coord.Y] = dat.InitData != InitialData.Wall;    //true - road, false - wall
-            }   //create single static class, give access for pacman to this class with GridWalls
+                GridWalls[(int)dat.coord.X / Coordinate.Multiplier, (int)dat.coord.Y / Coordinate.Multiplier] = dat.InitData != InitialData.Wall;    //true - road, false - wall
+            }   
+            
+            //create single static class, give access for pacman to this class with GridWalls
 
             List<IGameObject> objectCol = new List<IGameObject>();
 
