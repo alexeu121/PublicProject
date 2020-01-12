@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PacmanEngine.Components.Actors;
 using PacmanEngine.Components.Base;
 using PacmanEngine.Components.Graphics;
@@ -26,7 +27,7 @@ namespace Program.GameObjects
         public void Collide(IEnumerable<IGameObject> collisions)
         {
             foreach (var obj in collisions)     //pacman can eat only coins
-                if((obj.Name != "Pinky") && (obj.Name != "Blinky") && (obj.Name != "Inky") && (obj.Name != "Clyde"))
+                if((obj.Name == "SmallCoin") || (obj.Name == "BigCoin"))
                     obj.IsEnabled = false;
 
         }
@@ -35,7 +36,7 @@ namespace Program.GameObjects
         {
             DirectionKeys NewDirection = DirectionKeys.None;
 
-            if ((PressedKeys & DirectionKeys.Left) == DirectionKeys.Left)
+            if (((PressedKeys & DirectionKeys.Left) == DirectionKeys.Left) /*&& (Animation.Location.X % 1 == 0) && (Animation.Location.Y % 1 == 0)*/)           //find new pressed key of direction
                 NewDirection = DirectionKeys.Left;
             else if ((PressedKeys & DirectionKeys.Right) == DirectionKeys.Right)
                 NewDirection = DirectionKeys.Right;
@@ -83,15 +84,19 @@ namespace Program.GameObjects
                     break;
             }
 
-            //if (Animation.Location.X == 0)
-            //    Animation.Location = new Coordinate(Animation.Location.X + 21f, Animation.Location.Y);
-            //else if (Animation.Location.X == 21)
-            //    Animation.Location = new Coordinate(Animation.Location.X - 21f, Animation.Location.Y);
+            /*Пакман уходит влево, его координата становится 26.5, 26.6 и т.д. и он начинает показываться справа, а когда его координата становится
+             равно 27, он показывается целиком слева, вот в этот момент и нужно координату обнулить, тоже самое с уходом влево,
+             если координата станет равна -27, обнулить*/
 
-            //if (Animation.Location.Y == 0)
-            //    Animation.Location = new Coordinate(Animation.Location.X, Animation.Location.Y + 27f);
-            //else if (Animation.Location.Y == 27)
-            //    Animation.Location = new Coordinate(Animation.Location.X, Animation.Location.Y - 27f);
+            if (Math.Round(Convert.ToDecimal(Animation.Location.X)) == 0)
+                Animation.Location = new Coordinate(Animation.Location.X + 21f, Animation.Location.Y);
+            else if (Math.Round(Convert.ToDecimal(Animation.Location.X)) == 21)
+                Animation.Location = new Coordinate(Animation.Location.X - 21f, Animation.Location.Y);
+
+            if (Math.Round(Convert.ToDecimal(Animation.Location.Y)) == 0)
+                Animation.Location = new Coordinate(Animation.Location.X, Animation.Location.Y + 27f);
+            else if (Math.Round(Convert.ToDecimal(Animation.Location.Y)) == 27)
+                Animation.Location = new Coordinate(Animation.Location.X, Animation.Location.Y - 27f);
         }
     }
 }

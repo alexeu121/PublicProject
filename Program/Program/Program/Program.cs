@@ -47,12 +47,12 @@ namespace Program
                 )).
                 SelectMany(x => x).ToArray();
 
-            var Grid = new bool[21, 27];        //grid for data from App.Config file
+            var GridWalls = new bool[21, 27];        //grid for walls, data from App.Config file
 
             foreach (var dat in InitData)       //find where is a walls of maze
             {
-                Grid[(int)dat.coord.X, (int)dat.coord.Y] = dat.InitData != InitialData.Wall;
-            }
+                GridWalls[(int)dat.coord.X, (int)dat.coord.Y] = dat.InitData != InitialData.Wall;    //true - road, false - wall
+            }   //create single static class, give access for pacman to this class with GridWalls
 
             List<IGameObject> objectCol = new List<IGameObject>();
 
