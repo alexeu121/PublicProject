@@ -11,6 +11,7 @@ namespace Program.GameObjects
         public DirectionKeys PressedKeys { get; set; }
 
         private DirectionKeys CurrentDirection = DirectionKeys.None;
+
         public float Speed { get; set; } = 0.1f;    //1 cell = 16 pix // 21 x 27 cells
 
         public Pacman()    //constructor
@@ -36,7 +37,8 @@ namespace Program.GameObjects
         {
             DirectionKeys NewDirection = DirectionKeys.None;
 
-            if (((PressedKeys & DirectionKeys.Left) == DirectionKeys.Left) /*&& (Animation.Location.X % 1 == 0) && (Animation.Location.Y % 1 == 0)*/)           //find new pressed key of direction
+            //find new pressed key of direction
+            if (((PressedKeys & DirectionKeys.Left) == DirectionKeys.Left) && (Animation.Location.X % 1 == 0) && (Animation.Location.Y % 1 == 0))           
                 NewDirection = DirectionKeys.Left;
             else if ((PressedKeys & DirectionKeys.Right) == DirectionKeys.Right)
                 NewDirection = DirectionKeys.Right;
@@ -84,19 +86,18 @@ namespace Program.GameObjects
                     break;
             }
 
-            /*Пакман уходит влево, его координата становится 26.5, 26.6 и т.д. и он начинает показываться справа, а когда его координата становится
-             равно 27, он показывается целиком слева, вот в этот момент и нужно координату обнулить, тоже самое с уходом влево,
-             если координата станет равна -27, обнулить*/
-
-            if (Math.Round(Convert.ToDecimal(Animation.Location.X)) == 0)
+            //cross the walls on x coordinates
+            if ((Animation.Location.X <= 0.3f) && (Animation.Location.X >= -0.3f) && (CurrentDirection == DirectionKeys.Left))
                 Animation.Location = new Coordinate(Animation.Location.X + 21f, Animation.Location.Y);
-            else if (Math.Round(Convert.ToDecimal(Animation.Location.X)) == 21)
+
+            if ((Animation.Location.X <= 21.3f) && (Animation.Location.X >= 20.7f) && (CurrentDirection == DirectionKeys.Right))
                 Animation.Location = new Coordinate(Animation.Location.X - 21f, Animation.Location.Y);
 
-            if (Math.Round(Convert.ToDecimal(Animation.Location.Y)) == 0)
+            if ((Animation.Location.Y <= 0.3f) && (Animation.Location.Y >= -0.3f) && (CurrentDirection == DirectionKeys.Up))
                 Animation.Location = new Coordinate(Animation.Location.X, Animation.Location.Y + 27f);
-            else if (Math.Round(Convert.ToDecimal(Animation.Location.Y)) == 27)
-                Animation.Location = new Coordinate(Animation.Location.X, Animation.Location.Y - 27f);
+
+            if ((Animation.Location.Y <= 27.3f) && (Animation.Location.Y >= 26.7f) && (CurrentDirection == DirectionKeys.Down))
+                Animation.Location = new Coordinate(Animation.Location.X , Animation.Location.Y - 27f);
         }
     }
 }
