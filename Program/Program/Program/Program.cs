@@ -23,7 +23,7 @@ namespace Program
         Clyde
     }
 
-    class PointData
+    public class PointData
     {
         public Coordinate coord { get; set; }
 
@@ -42,33 +42,15 @@ namespace Program
         }
         private static IEnumerable<IGameObject> InitCollection()
         {
-
-            var mazeData = ConfigurationManager.AppSettings["MazeData"];
-
-            PointData[] InitData = mazeData.Split(' ').                                 //deserialization
-                Select(x => x.Select(y => int.Parse(y.ToString())).ToArray()).
-                Select((arr, Y) =>
-                arr.Select((Number, X) => new PointData() { coord = new Coordinate(X * Coordinate.Multiplier, Y * Coordinate.Multiplier), InitData = (InitialData)Number }
-                )).
-                SelectMany(x => x).ToArray();
-
-
-            
-
-            foreach (var dat in InitData)       //find where is a walls of maze
-            {
-                Grid[(uint)dat.coord.X / Coordinate.Multiplier, (uint)dat.coord.Y / Coordinate.Multiplier] = dat.InitData != InitialData.Wall;    //true - road, false - wall
-
-            }
-            //create single static class, give access for pacman to this class with GridWalls
-
+            //create grid with coord's
+            GridWalls.CreateInitData();
 
 
             List<IGameObject> objectCol = new List<IGameObject>();
 
             objectCol.Add(BaseGameObject.CreateStaticObject(AnimationType.MazeBlue, 0, 0));
 
-            objectCol.AddRange(InitData.Select(CreateObject).Where(x => x != null));
+            objectCol.AddRange(GridWalls.InitData.Select(CreateObject).Where(x => x != null));
 
 
             return objectCol;
@@ -81,7 +63,7 @@ namespace Program
             switch (pt.InitData)
             {
                 case InitialData.Pacman:
-                    result = new Pacman(Grid);
+                    result = new Pacman();
                     result.Animation.Location = pt.coord;
                     break;
                 case InitialData.Blinky:

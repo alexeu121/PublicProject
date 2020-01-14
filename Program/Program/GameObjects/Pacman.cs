@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using PacmanEngine.Components.Actors;
 using PacmanEngine.Components.Base;
 using PacmanEngine.Components.Graphics;
+using Program.MapGrid;
 
 namespace Program.GameObjects
 {
@@ -16,15 +17,13 @@ namespace Program.GameObjects
 
         public bool[,] Grid;
 
-        public Pacman(bool[,] GridOfWalls)    //constructor
+        public Pacman()    //constructor
         {
             Name = "Pacman";
 
             IsEnabled = true;
 
             Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);
-
-            Grid = GridOfWalls;
         }
 
 
@@ -39,10 +38,11 @@ namespace Program.GameObjects
 
         public virtual void Update()
         {
+            bool[,] Grid = GridWalls.Grid;
             DirectionKeys NewDirection = DirectionKeys.None;
 
             //find new pressed key of direction
-            if (((PressedKeys & DirectionKeys.Left) == DirectionKeys.Left) /*&& (Animation.Location.X % 1 == 0) && (Animation.Location.Y % 1 == 0)*/)           
+            if (((PressedKeys & DirectionKeys.Left) == DirectionKeys.Left) && (Animation.Location.X % Coordinate.Multiplier == 0) && (Animation.Location.Y % Coordinate.Multiplier == 0))           
                 NewDirection = DirectionKeys.Left;
             else if ((PressedKeys & DirectionKeys.Right) == DirectionKeys.Right)
                 NewDirection = DirectionKeys.Right;
@@ -77,8 +77,8 @@ namespace Program.GameObjects
             switch (CurrentDirection)   //change the direction of going
             {
                 case DirectionKeys.Left:
-                    //bool isWall = Grid[((Animation.Location.X / Coordinate.Multiplier) - 1), Animation.Location.Y / Coordinate.Multiplier];
-                   
+                    bool isWall = Grid[((Animation.Location.X / Coordinate.Multiplier) - 1), Animation.Location.Y / Coordinate.Multiplier];
+                   if (isWall)
                         Animation.Location -= new Coordinate(Speed, 0);
                     break;
                 case DirectionKeys.Right:
