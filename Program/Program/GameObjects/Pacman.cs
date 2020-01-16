@@ -15,8 +15,6 @@ namespace Program.GameObjects
 
         public int Speed { get; set; } = 100000;    //1 cell = 16 pix // 21 x 27 cells
 
-        public bool[,] Grid;
-
         public Pacman()    //constructor
         {
             Name = "Pacman";
@@ -31,77 +29,111 @@ namespace Program.GameObjects
         public void Collide(IEnumerable<IGameObject> collisions)
         {
             foreach (var obj in collisions)     //pacman can eat only coins
+            {
                 obj.IsEnabled = false;
+
+                if (obj.Name == "BigCoin")
+                {
+                    //CreateStaticObject(AnimationType.MazeWhite, 0, 0);
+                }
+            }
             //if((obj.Name == "SmallCoin") || (obj.Name == "BigCoin"))
-            
+
         }
 
         public virtual void Update()
         {
             bool[,] Grid = GridWalls.Grid;
             DirectionKeys NewDirection = DirectionKeys.None;
+            bool isRoad = false;
 
             //find new pressed key of direction
-            if (((PressedKeys & DirectionKeys.Left) == DirectionKeys.Left) && (Animation.Location.X % Coordinate.Multiplier == 0) && (Animation.Location.Y % Coordinate.Multiplier == 0))           
-                NewDirection = DirectionKeys.Left;
-            else if ((PressedKeys & DirectionKeys.Right) == DirectionKeys.Right)
-                NewDirection = DirectionKeys.Right;
-            else if ((PressedKeys & DirectionKeys.Up) == DirectionKeys.Up)
-                NewDirection = DirectionKeys.Up;
-            else if ((PressedKeys & DirectionKeys.Down) == DirectionKeys.Down)
-                NewDirection = DirectionKeys.Down;
+            if ((Animation.Location.X % Coordinate.Multiplier == 0) && (Animation.Location.Y % Coordinate.Multiplier == 0))
+            {
+                if ((PressedKeys & DirectionKeys.Left) == DirectionKeys.Left)
+                    NewDirection = DirectionKeys.Left;
+                else if ((PressedKeys & DirectionKeys.Right) == DirectionKeys.Right)
+                    NewDirection = DirectionKeys.Right;
+                else if ((PressedKeys & DirectionKeys.Up) == DirectionKeys.Up)
+                    NewDirection = DirectionKeys.Up;
+                else if ((PressedKeys & DirectionKeys.Down) == DirectionKeys.Down)
+                    NewDirection = DirectionKeys.Down;
+            }
 
             if (CurrentDirection != NewDirection && NewDirection != DirectionKeys.None) //change the direction of watching
             {
-                Animation newAnimation;
+                Animation newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);   //default
                 switch (NewDirection)
                 {
                     case DirectionKeys.Left:
-                        newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanLeft);
+                        isRoad = Grid[((int)Math.Ceiling((decimal)Animation.Location.X / (decimal)Coordinate.Multiplier) - 1), Animation.Location.Y / Coordinate.Multiplier];
+                        if (isRoad)
+                            newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanLeft);
                         break;
                     case DirectionKeys.Right:
-                        newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);
+                        isRoad = Grid[((int)((decimal)Animation.Location.X / (decimal)Coordinate.Multiplier) + 1), Animation.Location.Y / Coordinate.Multiplier];
+                        if (isRoad)
+                            newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);
                         break;
                     case DirectionKeys.Up:
-                        newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanUp);
+                        isRoad = Grid[Animation.Location.X / Coordinate.Multiplier, ((int)Math.Ceiling((decimal)Animation.Location.Y / (decimal)Coordinate.Multiplier) - 1)];
+                        if (isRoad)
+                            newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanUp);
                         break;
                     default:
-                        newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanDown);
+                        isRoad = Grid[Animation.Location.X / Coordinate.Multiplier, ((int)((decimal)Animation.Location.Y / (decimal)Coordinate.Multiplier) + 1)];
+                        if (isRoad)
+                            newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanDown);
                         break;
                 }
-                newAnimation.Location = Animation.Location;
-                Animation = newAnimation;
-                CurrentDirection = NewDirection;
+                if (isRoad)
+                {
+                    newAnimation.Location = Animation.Location;
+                    Animation = newAnimation;
+                    CurrentDirection = NewDirection;
+                }
             }
 
-            switch (CurrentDirection)   //change the direction of going
+            if (Animation.Location.X / Coordinate.Multiplier > 0 &&
+                Animation.Location.X / Coordinate.Multiplier < 20 &&
+                Animation.Location.Y / Coordinate.Multiplier > 0 &&
+                Animation.Location.Y / Coordinate.Multiplier < 26)
             {
-                case DirectionKeys.Left:
-                    bool isWall = Grid[((Animation.Location.X / Coordinate.Multiplier) - 1), Animation.Location.Y / Coordinate.Multiplier];
-                   if (isWall)
-                        Animation.Location -= new Coordinate(Speed, 0);
-                    break;
-                case DirectionKeys.Right:
-                    Animation.Location += new Coordinate(Speed, 0);
-                    break;
-                case DirectionKeys.Up:
-                    Animation.Location -= new Coordinate(0, Speed);
-                    break;
-                case DirectionKeys.Down:
-                    Animation.Location += new Coordinate(0, Speed);
-                    break;
+                switch (CurrentDirection)   //change the direction of going
+                {
+                    case DirectionKeys.Left:
+
+                        isRoad = Grid[((int)Math.Ceiling((decimal)Animation.Location.X / (decimal)Coordinate.Multiplier) - 1), Animation.Location.Y / Coordinate.Multiplier];
+                        if (isRoad)
+                            Animation.Location -= new Coordinate(Speed, 0);
+                        break;
+                    case DirectionKeys.Right:
+                        isRoad = Grid[((int)((decimal)Animation.Location.X / (decimal)Coordinate.Multiplier) + 1), Animation.Location.Y / Coordinate.Multiplier];
+                        if (isRoad)
+                            Animation.Location += new Coordinate(Speed, 0);
+                        break;
+                    case DirectionKeys.Up:
+                        isRoad = Grid[Animation.Location.X / Coordinate.Multiplier, ((int)Math.Ceiling((decimal)Animation.Location.Y / (decimal)Coordinate.Multiplier) - 1)];
+                        if (isRoad)
+                            Animation.Location -= new Coordinate(0, Speed);
+                        break;
+                    case DirectionKeys.Down:
+                        isRoad = Grid[Animation.Location.X / Coordinate.Multiplier, ((int)((decimal)Animation.Location.Y / (decimal)Coordinate.Multiplier) + 1)];
+                        if (isRoad)
+                            Animation.Location += new Coordinate(0, Speed);
+                        break;
+                }
             }
-
-            //cross the walls on x coordinates
-            if ((Animation.Location.X == 0) && (CurrentDirection == DirectionKeys.Left))
-                Animation.Location = new Coordinate(21*Coordinate.Multiplier, Animation.Location.Y);
-            else if ((Animation.Location.X == 21*Coordinate.Multiplier) && (CurrentDirection == DirectionKeys.Right))
-                Animation.Location = new Coordinate(0, Animation.Location.Y);
-
-            if ((Animation.Location.Y == 0) && (CurrentDirection == DirectionKeys.Up))
-                Animation.Location = new Coordinate(Animation.Location.X, 27*Coordinate.Multiplier);
-            else if ((Animation.Location.Y == 27*Coordinate.Multiplier) && (CurrentDirection == DirectionKeys.Down))
-                Animation.Location = new Coordinate(Animation.Location.X , 0);
+            else
+            {
+                //cross the walls on x coordinates
+                if ((Animation.Location.X == 0) && (CurrentDirection == DirectionKeys.Left))
+                    Animation.Location = new Coordinate(21 * Coordinate.Multiplier, Animation.Location.Y);
+                else if ((Animation.Location.X == 21 * Coordinate.Multiplier) && (CurrentDirection == DirectionKeys.Right))
+                    Animation.Location = new Coordinate(0, Animation.Location.Y);
+                else if (Animation.AnimationType == AnimationType.PacmanRight) Animation.Location += new Coordinate(Speed, 0);
+                else if (Animation.AnimationType == AnimationType.PacmanLeft) Animation.Location -= new Coordinate(Speed, 0);
+            }
         }
     }
 }
