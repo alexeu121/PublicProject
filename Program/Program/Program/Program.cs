@@ -38,9 +38,20 @@ namespace Program
 
         static void Main(string[] args)
         {
-            Engine.Run(InitCollection());           //when load, transmit collection of objects for show and processing
+            Master Overseer = new Master();
+            
+            List<IGameObject> Collection = new List<IGameObject>();
+
+            Collection.AddRange(CreateInitCollection());
+
+            //Overseer.WorkObjectsCollection = Collection.First(x => x.Name == "Pacman");
+
+
+            Engine.Run(Collection);       //when load, transmit collection of objects for show and processing
+
+
         }
-        private static IEnumerable<IGameObject> InitCollection()
+        private static IEnumerable<IGameObject> CreateInitCollection()
         {
             //create grid with coord's
             GridWalls.CreateInitData();
