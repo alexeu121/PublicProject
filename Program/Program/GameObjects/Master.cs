@@ -13,14 +13,21 @@ namespace Program
 {
     class Master : BaseGameObject
     {
-        public Master()
-        { }
+        public List<IGameObject> WObjCollection; 
 
-        public List<IGameObject> WorkObjectsCollection = new List<IGameObject>();
+        public Master()
+        {
+            WObjCollection = new List<IGameObject>();
+        }
+
+       
 
         public virtual void Update()
         {
-
+            if (WObjCollection[0].Animation.AnimationType == AnimationType.PacmanDown)
+            {
+                IGameObject pacman = WObjCollection.Find(item => item.Name == "Pacman");
+            }
         }
 
 

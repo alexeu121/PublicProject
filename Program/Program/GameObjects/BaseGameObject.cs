@@ -7,7 +7,7 @@ namespace Program.GameObjects
     class BaseGameObject : IGameObject
     {
         public string Name { get; set; }
-        public bool IsEnabled { get; set; } = true;//по умолчанию включен
+        public bool IsEnabled { get; set; } = true; //turn on when load
         public Animation Animation { get; set; }
 
         public static BaseGameObject CreateStaticObject(AnimationType type, int xPos, int yPos)

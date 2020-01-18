@@ -13,7 +13,9 @@ namespace Program.GameObjects
 
         private DirectionKeys CurrentDirection = DirectionKeys.None;
 
-        public int Speed { get; set; } = 50000;    //1 cell = 16 pix // 21 x 27 cells
+        public int Speed { get; set; } = 100000;    //1 cell = 16 pix // 21 x 27 cells
+
+        public List<IGameObject> MasterObj;
 
         public Pacman()    //constructor
         {
@@ -22,6 +24,8 @@ namespace Program.GameObjects
             IsEnabled = true;
 
             Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);
+
+            MasterObj = new List<IGameObject>();
         }
 
 
@@ -32,10 +36,6 @@ namespace Program.GameObjects
             {
                 obj.IsEnabled = false;
 
-                if (obj.Name == "BigCoin")
-                {
-                    //CreateStaticObject(AnimationType.MazeWhite, 0, 0);
-                }
             }
             //if((obj.Name == "SmallCoin") || (obj.Name == "BigCoin"))
 

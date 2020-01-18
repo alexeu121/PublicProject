@@ -39,13 +39,24 @@ namespace Program
         static void Main(string[] args)
         {
             Master master = new Master();
+            master.Name = "Master";
             
             List<IGameObject> Collection = new List<IGameObject>();
 
             Collection.AddRange(CreateInitCollection());
 
-            master.WorkObjectsCollection.AddRange(Collection.Where(x => x.Name == "Pacman").Select(x=> x));
+            Pacman pacman = Collection.OfType<Pacman>().FirstOrDefault();
 
+            if(pacman != null) pacman.MasterObj.Add(master);
+
+            master.WObjCollection.AddRange(Collection.Where(x => ((x.Name == "Pacman") ||
+                                                                (x.Name == "Blinky") || 
+                                                                (x.Name == "Pinky") || 
+                                                                (x.Name == "Inky") || 
+                                                                (x.Name == "Clyde") ||
+                                                                (x.Name == "MazeBlue"))).Select(x=> x));
+
+            
 
             Engine.Run(Collection);       //when load, transmit collection of objects for show and processing
 
@@ -56,13 +67,11 @@ namespace Program
             //create grid with coord's
             GridWalls.CreateInitData();
 
+            List<IGameObject> objectCol = new List<IGameObject>();      // create list of work objects
 
-            List<IGameObject> objectCol = new List<IGameObject>();
+            objectCol.Add(BaseGameObject.CreateStaticObject(AnimationType.MazeBlue, 0, 0));         // create object of Maze
 
-            objectCol.Add(BaseGameObject.CreateStaticObject(AnimationType.MazeBlue, 0, 0)); 
-
-            objectCol.AddRange(GridWalls.InitData.Select(CreateObject).Where(x => x != null));
-
+            objectCol.AddRange(GridWalls.InitData.Select(CreateObject).Where(x => x != null));          //create and add moving object
 
             return objectCol;
         }
