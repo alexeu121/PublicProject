@@ -38,13 +38,13 @@ namespace Program
 
         static void Main(string[] args)
         {
-            Master Overseer = new Master();
+            Master master = new Master();
             
             List<IGameObject> Collection = new List<IGameObject>();
 
             Collection.AddRange(CreateInitCollection());
 
-            //Overseer.WorkObjectsCollection = Collection.First(x => x.Name == "Pacman");
+            master.WorkObjectsCollection.AddRange(Collection.Where(x => x.Name == "Pacman").Select(x=> x));
 
 
             Engine.Run(Collection);       //when load, transmit collection of objects for show and processing
@@ -59,7 +59,7 @@ namespace Program
 
             List<IGameObject> objectCol = new List<IGameObject>();
 
-            objectCol.Add(BaseGameObject.CreateStaticObject(AnimationType.MazeBlue, 0, 0));
+            objectCol.Add(BaseGameObject.CreateStaticObject(AnimationType.MazeBlue, 0, 0)); 
 
             objectCol.AddRange(GridWalls.InitData.Select(CreateObject).Where(x => x != null));
 

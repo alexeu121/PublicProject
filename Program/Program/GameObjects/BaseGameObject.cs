@@ -39,7 +39,7 @@ namespace Program.GameObjects
                     {
                         Animation = AnimationFactory.CreateAnimation(AnimationType.SmallCoin)
                     };
-                    break;        
+                    break;
             }
             if (result != null)
             {

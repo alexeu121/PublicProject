@@ -11,9 +11,17 @@ using Program.MapGrid;
 
 namespace Program
 {
-    class Master
+    class Master : BaseGameObject
     {
+        public Master()
+        { }
+
         public List<IGameObject> WorkObjectsCollection = new List<IGameObject>();
+
+        public virtual void Update()
+        {
+
+        }
 
 
     }
