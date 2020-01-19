@@ -40,7 +40,9 @@ namespace Program
             pacman = WObjCollection.OfType<Pacman>().FirstOrDefault();
         }
 
-        public virtual void Update()
+
+
+        public override void Update()
         {
             if (pacman.EatTimerOn && pacman.EatTimer == 600)
             {

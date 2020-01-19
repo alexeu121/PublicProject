@@ -54,7 +54,7 @@ namespace Program.GameObjects
 
         }
 
-        public virtual void Update()
+        public override void Update()
         {
             if (EatTimerOn)
                 EatTimer += 1;
