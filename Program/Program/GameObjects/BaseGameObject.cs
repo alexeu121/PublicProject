@@ -48,6 +48,9 @@ namespace Program.GameObjects
             }
             return result;
         }
-        public virtual void Update() { }
+        public virtual void Update()
+        {
+
+        }
     }
 }

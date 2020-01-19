@@ -33,34 +33,33 @@ namespace Program
 
     class Program
     {
-
         static bool[,] Grid = new bool[21, 27];        //grid for walls, data from App.Config file
 
         static void Main(string[] args)
         {
-            Master master = new Master();
-            master.Name = "Master";
-            
+
             List<IGameObject> Collection = new List<IGameObject>();
 
             Collection.AddRange(CreateInitCollection());
 
             Pacman pacman = Collection.OfType<Pacman>().FirstOrDefault();
 
-            if(pacman != null) pacman.MasterObj.Add(master);
+            Master master = new Master();
 
             master.WObjCollection.AddRange(Collection.Where(x => ((x.Name == "Pacman") ||
-                                                                (x.Name == "Blinky") || 
-                                                                (x.Name == "Pinky") || 
-                                                                (x.Name == "Inky") || 
-                                                                (x.Name == "Clyde") ||
-                                                                (x.Name == "MazeBlue"))).Select(x=> x));
-
+                                                                  (x.Name == "Blinky") || 
+                                                                  (x.Name == "Pinky") || 
+                                                                  (x.Name == "Inky") || 
+                                                                  (x.Name == "Clyde") ||
+                                                                  (x.Name == "MazeBlue"))).Select(x=> x));
             
+            
+            master.Name = "Master";
+            if (pacman != null) pacman.MasterObj = master;
+
+
 
             Engine.Run(Collection);       //when load, transmit collection of objects for show and processing
-
-
         }
         private static IEnumerable<IGameObject> CreateInitCollection()
         {

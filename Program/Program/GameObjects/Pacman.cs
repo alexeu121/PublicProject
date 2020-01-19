@@ -15,7 +15,12 @@ namespace Program.GameObjects
 
         public int Speed { get; set; } = 100000;    //1 cell = 16 pix // 21 x 27 cells
 
-        public List<IGameObject> MasterObj;
+        public Master MasterObj;
+
+        private bool[,] Grid;
+
+        public int EatTimer { get; set; }
+        public bool EatTimerOn { get; set; } = false;
 
         public Pacman()    //constructor
         {
@@ -23,18 +28,26 @@ namespace Program.GameObjects
 
             IsEnabled = true;
 
+            Grid = GridWalls.Grid;
+
             Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);
 
-            MasterObj = new List<IGameObject>();
+            EatTimer = 0;
+
+            //MasterObj = new Master();
         }
 
 
 
         public void Collide(IEnumerable<IGameObject> collisions)
         {
+            MasterObj.Pacman_collisions = collisions;
+
             foreach (var obj in collisions)     //pacman can eat only coins
             {
                 obj.IsEnabled = false;
+                if (obj.Name == "BigCoin")
+                    EatTimerOn = true;
 
             }
             //if((obj.Name == "SmallCoin") || (obj.Name == "BigCoin"))
@@ -43,7 +56,9 @@ namespace Program.GameObjects
 
         public virtual void Update()
         {
-            bool[,] Grid = GridWalls.Grid;
+            if (EatTimerOn)
+                EatTimer += 1;
+
             DirectionKeys NewDirection = DirectionKeys.None;
             bool isRoad = false;
 
