@@ -16,7 +16,7 @@ namespace Program
         public List<IGameObject> WObjCollection;
         public Pacman pacman;
         public BaseGameObject maze;
-
+        
         //public bool isSmallCoinOff;
 
         public IEnumerable<IGameObject> Pacman_collisions;
@@ -25,6 +25,8 @@ namespace Program
         public Master()
         {
             WObjCollection = new List<IGameObject>();
+
+            IsEnabled = true;
             
             //pacman = new List<IGameObject>();
 

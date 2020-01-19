@@ -57,7 +57,7 @@ namespace Program
             master.Name = "Master";
             if (pacman != null) pacman.MasterObj = master;
 
-
+            Collection.Add(master);
 
             Engine.Run(Collection);       //when load, transmit collection of objects for show and processing
         }
