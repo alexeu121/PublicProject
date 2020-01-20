@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using PacmanEngine.Components.Actors;
 using PacmanEngine.Components.Base;
 using PacmanEngine.Components.Graphics;
-using Program.GameObjects;
-using Program.MapGrid;
+using Program.ManagedObjects.Antagonists;
+using Program.ManagedObjects.Protagonists;
+using Program.WorkSpace;
 
-namespace Program
+namespace Program.UnmanagedObjects
 {
     class Master : BaseGameObject
     {
@@ -44,15 +45,15 @@ namespace Program
 
         public override void Update()
         {
-            if (pacman.EatTimerOn && pacman.EatTimer == 600)
-            {
-                pacman.EatTimerOn = false;
-                pacman.EatTimer = 0;
+            //if (pacman.EatTimerOn && pacman.EatTimer == 600)
+            //{
+            //    pacman.EatTimerOn = false;
+            //    pacman.EatTimer = 0;
 
-                maze = WObjCollection.OfType<BaseGameObject>().Where(x=>x.Name == "MazeBlue").FirstOrDefault();
-                maze.Animation = AnimationFactory.CreateAnimation(AnimationType.MazeWhite);
+            //    maze = WObjCollection.OfType<BaseGameObject>().Where(x=>x.Name == "MazeBlue").FirstOrDefault();
+            //    maze.Animation = AnimationFactory.CreateAnimation(AnimationType.MazeWhite);
                 
-            }
+            //}
 
 
 

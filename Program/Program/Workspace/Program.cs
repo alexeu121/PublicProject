@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Collections.Generic;
 using System.Linq;
 using PacmanEngine.Components.Actors;
 using PacmanEngine.Components.Base;
 using PacmanEngine.Components.Graphics;
-using Program.GameObjects;
-using Program.MapGrid;
+using Program.ManagedObjects.Antagonists;
+using Program.ManagedObjects.Protagonists;
+using Program.UnmanagedObjects;
 
-namespace Program
+namespace Program.WorkSpace
 {
     public enum InitialData
     {

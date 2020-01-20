@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using PacmanEngine.Components.Actors;
 using PacmanEngine.Components.Graphics;
+using Program.UnmanagedObjects;
+using Program.WorkSpace;
 
-namespace Program.GameObjects
+namespace Program.ManagedObjects.Antagonists
 {
     class Ghost : BaseGameObject
     {

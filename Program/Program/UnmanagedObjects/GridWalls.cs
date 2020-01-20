@@ -4,8 +4,9 @@ using System.Configuration;
 using PacmanEngine.Components.Actors;
 using PacmanEngine.Components.Base;
 using PacmanEngine.Components.Graphics;
+using Program.WorkSpace;
 
-namespace Program.MapGrid
+namespace Program.UnmanagedObjects
 {
     public class GridWalls
     {

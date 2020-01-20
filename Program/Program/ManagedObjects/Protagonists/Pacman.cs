@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using PacmanEngine.Components.Actors;
 using PacmanEngine.Components.Base;
 using PacmanEngine.Components.Graphics;
-using Program.MapGrid;
+using Program.UnmanagedObjects;
 
-namespace Program.GameObjects
+namespace Program.ManagedObjects.Protagonists
 {
     class Pacman : BaseGameObject, IProtagonist
     {

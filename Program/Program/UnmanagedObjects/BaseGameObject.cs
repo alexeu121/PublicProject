@@ -2,7 +2,7 @@
 using PacmanEngine.Components.Base;
 using PacmanEngine.Components.Graphics;
 
-namespace Program.GameObjects
+namespace Program.UnmanagedObjects
 {
     class BaseGameObject : IGameObject
     {

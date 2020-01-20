@@ -58,6 +58,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,12 +67,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameObjects\BaseGameObject.cs" />
-    <Compile Include="GameObjects\Ghost.cs" />
-    <Compile Include="GameObjects\Pacman.cs" />
-    <Compile Include="MapGrid\GridWalls.cs" />
-    <Compile Include="GameObjects\Master.cs" />
-    <Compile Include="Program\Program.cs" />
+    <Compile Include="UnmanagedObjects\BaseGameObject.cs" />
+    <Compile Include="ManagedObjects\Antagonists\Ghost.cs" />
+    <Compile Include="ManagedObjects\Protagonists\Pacman.cs" />
+    <Compile Include="UnmanagedObjects\GridWalls.cs" />
+    <Compile Include="UnmanagedObjects\Master.cs" />
+    <Compile Include="Workspace\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -89,5 +90,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
