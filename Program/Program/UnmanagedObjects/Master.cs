@@ -14,55 +14,72 @@ namespace Program.UnmanagedObjects
 {
     class Master : BaseGameObject
     {
-        public List<IGameObject> WObjCollection;
+        public List<IGameObject> ManagedObjects;
         public Pacman pacman;
         public BaseGameObject maze;
+        public List<IGameObject> CollectionOfAllObjects;
         
-        //public bool isSmallCoinOff;
 
-        public IEnumerable<IGameObject> Pacman_collisions;
+        public bool isPacmanEatBigCoin = false;
        
 
         public Master()
         {
-            WObjCollection = new List<IGameObject>();
 
             IsEnabled = true;
-            
-            //pacman = new List<IGameObject>();
+
+            Name = "Master";
+
+            CollectionOfAllObjects = new List<IGameObject>();
+
+            InitAllObjects();           //init all objects from collecion
 
         }
 
-    
-     
-
-        public void GetAllObjects()
+        private void InitAllObjects()
         {
-            pacman = WObjCollection.OfType<Pacman>().FirstOrDefault();
+
+
+            //master.ManagedObjects.AddRange(CollectionOfAllObjects.Where(x => ((x.Name == "Pacman") ||
+            //                                                      (x.Name == "Blinky") ||
+            //                                                      (x.Name == "Pinky") ||
+            //                                                      (x.Name == "Inky") ||
+            //                                                      (x.Name == "Clyde") ||
+            //                                                      (x.Name == "MazeBlue") ||
+            //                                                      (x.Name == "MazeWhite"))).Select(x => x));
+
         }
-
-
 
         public override void Update()
         {
+
+
             //if (pacman.EatTimerOn && pacman.EatTimer == 600)
             //{
             //    pacman.EatTimerOn = false;
             //    pacman.EatTimer = 0;
 
-            //    maze = WObjCollection.OfType<BaseGameObject>().Where(x=>x.Name == "MazeBlue").FirstOrDefault();
-            //    maze.Animation = AnimationFactory.CreateAnimation(AnimationType.MazeWhite);
-                
             //}
 
 
+            if (isPacmanEatBigCoin)
+            {
+                IGameObject maze = CollectionOfAllObjects.Where(x => x.Name == "MazeBlue").Select(x => x).FirstOrDefault();
 
+                maze.IsEnabled = false;
+
+                maze = CollectionOfAllObjects.Where(x => x.Name == "MazeWhite").Select(x => x).FirstOrDefault();
+
+                maze.IsEnabled = true;
+
+                isPacmanEatBigCoin = false;
+            }
 
             //foreach (var obj in Pacman_collisions)
             //{
             //    if (obj.Name == "BigCoin")
             //    {
-            //        BaseGameObject.CreateStaticObject(AnimationType.MazeWhite, 0, 0);
+                   
             //    }
             //}
         }

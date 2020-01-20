@@ -45,18 +45,17 @@ namespace Program.WorkSpace
 
             Master master = new Master();
 
-            master.WObjCollection.AddRange(Collection.Where(x => ((x.Name == "Pacman") ||
-                                                                  (x.Name == "Blinky") || 
-                                                                  (x.Name == "Pinky") || 
-                                                                  (x.Name == "Inky") || 
-                                                                  (x.Name == "Clyde") ||
-                                                                  (x.Name == "MazeBlue"))).Select(x=> x));
             
             
-            master.Name = "Master";
-            if (pacman != null) pacman.MasterObj = master;
+            
+            if (pacman != null) pacman.MasterObj = master;          //ref to pacman from master
+
+            master.CollectionOfAllObjects = Collection;         //give collection of all elements to master
+            
 
             Collection.Add(master);
+
+
 
             Engine.Run(Collection);       //when load, transmit collection of objects for show and processing
         }
@@ -68,6 +67,11 @@ namespace Program.WorkSpace
             List<IGameObject> objectCol = new List<IGameObject>();      // create list of work objects
 
             objectCol.Add(BaseGameObject.CreateStaticObject(AnimationType.MazeBlue, 0, 0));         // create object of Maze
+
+            BaseGameObject mazeWhite = BaseGameObject.CreateStaticObject(AnimationType.MazeWhite, 0, 0);
+            mazeWhite.IsEnabled = false;
+            
+            objectCol.Add(mazeWhite);         // create object of Maze
 
             objectCol.AddRange(GridWalls.InitData.Select(CreateObject).Where(x => x != null));          //create and add moving object
 

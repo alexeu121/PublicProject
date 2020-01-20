@@ -34,5 +34,6 @@ namespace Program.UnmanagedObjects
                 Grid[(int)dat.coord.X / Coordinate.Multiplier, (int)dat.coord.Y / Coordinate.Multiplier] = dat.InitData != InitialData.Wall;    //true - road, false - wall
             }
         }
+
     }
 }

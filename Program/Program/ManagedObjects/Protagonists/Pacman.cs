@@ -41,13 +41,17 @@ namespace Program.ManagedObjects.Protagonists
 
         public void Collide(IEnumerable<IGameObject> collisions)
         {
-            MasterObj.Pacman_collisions = collisions;
-
+            
             foreach (var obj in collisions)     //pacman can eat only coins
             {
                 obj.IsEnabled = false;
+
                 if (obj.Name == "BigCoin")
+                {
                     EatTimerOn = true;
+                    MasterObj.isPacmanEatBigCoin = true;
+
+                }
 
             }
             //if((obj.Name == "SmallCoin") || (obj.Name == "BigCoin"))
