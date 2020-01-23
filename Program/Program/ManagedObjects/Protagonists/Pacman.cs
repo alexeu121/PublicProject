@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using PacmanEngine.Components.Actors;
 using PacmanEngine.Components.Base;
 using PacmanEngine.Components.Graphics;
-using Program.UnmanagedObjects;
+using Program.UnmanagedSources;
 
 namespace Program.ManagedObjects.Protagonists
 {
@@ -28,7 +28,7 @@ namespace Program.ManagedObjects.Protagonists
 
             IsEnabled = true;
 
-            Grid = GridWalls.Grid;
+            Grid = ObjectsBuilder.Grid;
 
             Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);
 

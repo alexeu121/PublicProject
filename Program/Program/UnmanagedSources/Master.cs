@@ -10,7 +10,7 @@ using Program.ManagedObjects.Antagonists;
 using Program.ManagedObjects.Protagonists;
 using Program.WorkSpace;
 
-namespace Program.UnmanagedObjects
+namespace Program.UnmanagedSources
 {
     class Master : BaseGameObject
     {
@@ -64,14 +64,12 @@ namespace Program.UnmanagedObjects
 
             if (isPacmanEatBigCoin)
             {
-                IGameObject maze = CollectionOfAllObjects.Where(x => x.Name == "MazeBlue").Select(x => x).FirstOrDefault();
+                IGameObject mazeBlue = CollectionOfAllObjects.Where(x => x.Name == "MazeBlue").Select(x => x).FirstOrDefault();
+                IGameObject mazeWhite = CollectionOfAllObjects.Where(x => x.Name == "MazeWhite").Select(x => x).FirstOrDefault();
 
-                maze.IsEnabled = false;
-
-                maze = CollectionOfAllObjects.Where(x => x.Name == "MazeWhite").Select(x => x).FirstOrDefault();
-
-                maze.IsEnabled = true;
-
+                mazeBlue.IsEnabled = false;
+                mazeWhite.IsEnabled = true;
+                
                 isPacmanEatBigCoin = false;
             }
 

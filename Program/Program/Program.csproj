@@ -67,11 +67,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnmanagedObjects\BaseGameObject.cs" />
+    <Compile Include="UnmanagedSources\BaseGameObject.cs" />
     <Compile Include="ManagedObjects\Antagonists\Ghost.cs" />
     <Compile Include="ManagedObjects\Protagonists\Pacman.cs" />
-    <Compile Include="UnmanagedObjects\GridWalls.cs" />
-    <Compile Include="UnmanagedObjects\Master.cs" />
+    <Compile Include="UnmanagedSources\ObjectsBuilder.cs" />
+    <Compile Include="UnmanagedSources\Master.cs" />
     <Compile Include="Workspace\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

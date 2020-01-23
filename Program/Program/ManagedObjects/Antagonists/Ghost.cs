@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using PacmanEngine.Components.Actors;
 using PacmanEngine.Components.Graphics;
-using Program.UnmanagedObjects;
+using Program.UnmanagedSources;
 using Program.WorkSpace;
 
 namespace Program.ManagedObjects.Antagonists

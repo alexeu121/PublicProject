@@ -5,7 +5,7 @@ using PacmanEngine.Components.Base;
 using PacmanEngine.Components.Graphics;
 using Program.ManagedObjects.Antagonists;
 using Program.ManagedObjects.Protagonists;
-using Program.UnmanagedObjects;
+using Program.UnmanagedSources;
 
 namespace Program.WorkSpace
 {
@@ -36,83 +36,18 @@ namespace Program.WorkSpace
 
         static void Main(string[] args)
         {
+            List<IGameObject> Collection = ObjectsBuilder.CreateInitData();
 
-            List<IGameObject> Collection = new List<IGameObject>();
-
-            Collection.AddRange(CreateInitCollection());
-
+            //refs=====================
             Pacman pacman = Collection.OfType<Pacman>().FirstOrDefault();
-
             Master master = new Master();
-
-            
-            
-            
             if (pacman != null) pacman.MasterObj = master;          //ref to pacman from master
-
             master.CollectionOfAllObjects = Collection;         //give collection of all elements to master
-            
-
             Collection.Add(master);
-
-
+            //=========================
 
             Engine.Run(Collection);       //when load, transmit collection of objects for show and processing
         }
-        private static IEnumerable<IGameObject> CreateInitCollection()
-        {
-            //create grid with coord's
-            GridWalls.CreateInitData();
-
-            List<IGameObject> objectCol = new List<IGameObject>();      // create list of work objects
-
-            objectCol.Add(BaseGameObject.CreateStaticObject(AnimationType.MazeBlue, 0, 0));         // create object of Maze
-
-            BaseGameObject mazeWhite = BaseGameObject.CreateStaticObject(AnimationType.MazeWhite, 0, 0);
-            mazeWhite.IsEnabled = false;
-            
-            objectCol.Add(mazeWhite);         // create object of Maze
-
-            objectCol.AddRange(GridWalls.InitData.Select(CreateObject).Where(x => x != null));          //create and add moving object
-
-            return objectCol;
-        }
-
-        static BaseGameObject CreateObject(PointData pt)
-        {
-            BaseGameObject result = null;
-
-            switch (pt.InitData)
-            {
-                case InitialData.Pacman:
-                    result = new Pacman();
-                    result.Animation.Location = pt.coord;
-                    break;
-                case InitialData.Blinky:
-                    result = new Ghost("Blinky");
-                    result.Animation.Location = pt.coord;
-                    break;
-                case InitialData.Pinky:
-                    result = new Ghost("Pinky");
-                    result.Animation.Location = pt.coord;
-                    break;
-                case InitialData.Inky:
-                    result = new Ghost("Inky");
-                    result.Animation.Location = pt.coord;
-                    break;
-                case InitialData.Clyde:
-                    result = new Ghost("Clyde");
-                    result.Animation.Location = pt.coord;
-                    break;
-                case InitialData.BigCoin:
-                    result = BaseGameObject.CreateStaticObject(AnimationType.BigCoin, pt.coord.X, pt.coord.Y);
-                    break;
-                case InitialData.SmallCoin:
-                    result = BaseGameObject.CreateStaticObject(AnimationType.SmallCoin, pt.coord.X, pt.coord.Y);
-                    break;
-                
-            }
-            return result;
-        }
+              
     }
 }
