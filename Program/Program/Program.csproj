@@ -72,6 +72,8 @@
     <Compile Include="ManagedObjects\Protagonists\Pacman.cs" />
     <Compile Include="UnmanagedSources\ObjectsBuilder.cs" />
     <Compile Include="UnmanagedSources\Master.cs" />
+    <Compile Include="UnmanagedSources\PathFinder.cs" />
+    <Compile Include="UnmanagedSources\Square.cs" />
     <Compile Include="Workspace\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

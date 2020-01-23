@@ -14,17 +14,25 @@ namespace Program.UnmanagedSources
 {
     class Master : BaseGameObject
     {
-        public List<IGameObject> ManagedObjects;
-        public Pacman pacman;
-        public BaseGameObject maze;
+        //public List<IGameObject> ManagedObjects;
+        //public Pacman pacman;
+        //public BaseGameObject maze;
         public List<IGameObject> CollectionOfAllObjects;
-        
+
+        IGameObject mazeBlue;
+        IGameObject mazeWhite;
+
+        public int eatTimer;
+        public bool isEatTimerOn;
 
         public bool isPacmanEatBigCoin = false;
        
 
         public Master()
         {
+            eatTimer = 0;
+
+            isEatTimerOn = false;
 
             IsEnabled = true;
 
@@ -34,11 +42,13 @@ namespace Program.UnmanagedSources
 
             InitAllObjects();           //init all objects from collecion
 
+            
+
         }
 
-        private void InitAllObjects()
+        public void InitAllObjects()
         {
-
+            
 
             //master.ManagedObjects.AddRange(CollectionOfAllObjects.Where(x => ((x.Name == "Pacman") ||
             //                                                      (x.Name == "Blinky") ||
@@ -52,26 +62,35 @@ namespace Program.UnmanagedSources
 
         public override void Update()
         {
-
-
-            //if (pacman.EatTimerOn && pacman.EatTimer == 600)
-            //{
-            //    pacman.EatTimerOn = false;
-            //    pacman.EatTimer = 0;
-
-            //}
-
+            mazeBlue = CollectionOfAllObjects.Where(x => x.Name == "MazeBlue").Select(x => x).FirstOrDefault();
+            mazeWhite = CollectionOfAllObjects.Where(x => x.Name == "MazeWhite").Select(x => x).FirstOrDefault();
 
             if (isPacmanEatBigCoin)
             {
-                IGameObject mazeBlue = CollectionOfAllObjects.Where(x => x.Name == "MazeBlue").Select(x => x).FirstOrDefault();
-                IGameObject mazeWhite = CollectionOfAllObjects.Where(x => x.Name == "MazeWhite").Select(x => x).FirstOrDefault();
+                isEatTimerOn = true;
+
 
                 mazeBlue.IsEnabled = false;
                 mazeWhite.IsEnabled = true;
-                
+
                 isPacmanEatBigCoin = false;
             }
+
+            if (isEatTimerOn)
+            {
+                eatTimer += 1;
+            }
+
+            if (eatTimer == 300)
+            {
+                isEatTimerOn = false;
+                eatTimer = 0;
+                mazeBlue.IsEnabled = true;
+                mazeWhite.IsEnabled = false;
+            }
+
+
+            
 
             //foreach (var obj in Pacman_collisions)
             //{

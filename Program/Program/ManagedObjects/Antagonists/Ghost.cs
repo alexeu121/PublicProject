@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using PacmanEngine.Components.Actors;
+using PacmanEngine.Components.Base;
 using PacmanEngine.Components.Graphics;
 using Program.UnmanagedSources;
 using Program.WorkSpace;
@@ -8,8 +9,23 @@ namespace Program.ManagedObjects.Antagonists
 {
     class Ghost : BaseGameObject
     {
+        private enum Direction { up, down, left, right}
+        private enum ShostState { Regular, }
 
-        public float Speed { get; set; } = 100000;
+        public float Speed { get; set; } = Coordinate.Multiplier / 10;
+
+        protected Coordinate step;
+
+        private const int RegularGhostSpeed = Coordinate.Multiplier / 8;
+        private const int BlueGhostSpeed = Coordinate.Multiplier / 10;
+        private const int EyesSpeed = Coordinate.Multiplier / 10;
+
+        //public Ghost(int x, int y, string name, AnimationType? animationType) : base(x, y, name, animationType)
+        //{
+
+        //}
+
+        //protected abstract Animation GetAnimation();
 
         public Ghost(string inpName)
         {

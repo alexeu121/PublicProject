@@ -19,8 +19,6 @@ namespace Program.ManagedObjects.Protagonists
 
         private bool[,] Grid;
 
-        public int EatTimer { get; set; }
-        public bool EatTimerOn { get; set; } = false;
 
         public Pacman()    //constructor
         {
@@ -32,7 +30,7 @@ namespace Program.ManagedObjects.Protagonists
 
             Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);
 
-            EatTimer = 0;
+            
 
             //MasterObj = new Master();
         }
@@ -48,7 +46,7 @@ namespace Program.ManagedObjects.Protagonists
 
                 if (obj.Name == "BigCoin")
                 {
-                    EatTimerOn = true;
+                    
                     MasterObj.isPacmanEatBigCoin = true;
 
                 }
@@ -60,8 +58,8 @@ namespace Program.ManagedObjects.Protagonists
 
         public override void Update()
         {
-            if (EatTimerOn)
-                EatTimer += 1;
+            //if (EatTimerOn)
+            //    EatTimer += 1;
 
             DirectionKeys NewDirection = DirectionKeys.None;
             bool isRoad = false;

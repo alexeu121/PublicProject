@@ -53,7 +53,7 @@ namespace Program.UnmanagedSources
             return objectCol;
         }
 
-        static BaseGameObject CreateObject(PointData pt)
+        private static BaseGameObject CreateObject(PointData pt)
         {
             BaseGameObject result = null;
 
@@ -88,6 +88,26 @@ namespace Program.UnmanagedSources
 
             }
             return result;
+        }
+
+        private static void InitSquare(char squareType, int x, int y, List<BaseGameObject> gameObjects)
+        {
+            // Wall = 0, Empty = 1, SmallCoin = 2, BigCoin = 3, Pacman = 4, Blinky = 5, Pinky = 6, Inky = 7, Clyde = 8.
+            switch (squareType)
+            {
+                //case '2':
+                //    gameObjects.Add(new BaseGameObject(x, y, ObjectNames.Coin, AnimationType.SmallCoin));
+                //    break;
+                //case '3':
+                //    gameObjects.Add(new BaseGameObject(x, y, ObjectNames.BigCoin, AnimationType.BigCoin));
+                //    break;
+                //case '4':
+                //    gameObjects.Add(new BaseGameObjects.Pacman(x, y));
+                //    break;
+            }
+
+            if (squareType != '0')
+                PathFinder.Grid[x, y] = true;
         }
 
     }
