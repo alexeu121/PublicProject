@@ -70,6 +70,7 @@
     <Compile Include="UnmanagedSources\BaseGameObject.cs" />
     <Compile Include="ManagedObjects\Antagonists\Ghost.cs" />
     <Compile Include="ManagedObjects\Protagonists\Pacman.cs" />
+    <Compile Include="UnmanagedSources\CoordinateExtension.cs" />
     <Compile Include="UnmanagedSources\ObjectsBuilder.cs" />
     <Compile Include="UnmanagedSources\Master.cs" />
     <Compile Include="UnmanagedSources\PathFinder.cs" />

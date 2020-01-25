@@ -7,7 +7,7 @@ using Program.ManagedObjects.Antagonists;
 using Program.ManagedObjects.Protagonists;
 using Program.UnmanagedSources;
 
-namespace Program.WorkSpace
+namespace Program.Workspace
 {
     public enum InitialData
     {
@@ -36,13 +36,18 @@ namespace Program.WorkSpace
 
         static void Main(string[] args)
         {
+            RunGame();
+        }
+
+        public static void RunGame()
+        {
             List<IGameObject> Collection = ObjectsBuilder.CreateInitData();
 
             //refs=====================
             Pacman pacman = Collection.OfType<Pacman>().FirstOrDefault();
-            Master master = new Master();
-            if (pacman != null) pacman.MasterObj = master;          //ref to pacman from master
-            master.CollectionOfAllObjects = Collection;         //give collection of all elements to master
+            Master master = new Master(Collection);
+            if (pacman != null) pacman.master = master;          //ref to pacman from master
+            master.Initialize(Collection);         //give collection of all elements to master
             Collection.Add(master);
             //=========================
 

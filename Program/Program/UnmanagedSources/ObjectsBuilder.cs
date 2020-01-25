@@ -4,12 +4,13 @@ using System.Configuration;
 using PacmanEngine.Components.Actors;
 using PacmanEngine.Components.Base;
 using PacmanEngine.Components.Graphics;
-using Program.WorkSpace;
 using System.Collections.Generic;
 using Program.ManagedObjects.Protagonists;
 using Program.ManagedObjects.Antagonists;
+using Program.UnmanagedSources;
+using Program.Workspace;
 
-namespace Program.UnmanagedSources
+namespace Program
 {
     public static class ObjectsBuilder
     {
@@ -93,8 +94,8 @@ namespace Program.UnmanagedSources
         private static void InitSquare(char squareType, int x, int y, List<BaseGameObject> gameObjects)
         {
             // Wall = 0, Empty = 1, SmallCoin = 2, BigCoin = 3, Pacman = 4, Blinky = 5, Pinky = 6, Inky = 7, Clyde = 8.
-            switch (squareType)
-            {
+            //switch (squareType)
+            //{
                 //case '2':
                 //    gameObjects.Add(new BaseGameObject(x, y, ObjectNames.Coin, AnimationType.SmallCoin));
                 //    break;
@@ -104,7 +105,7 @@ namespace Program.UnmanagedSources
                 //case '4':
                 //    gameObjects.Add(new BaseGameObjects.Pacman(x, y));
                 //    break;
-            }
+            //}
 
             if (squareType != '0')
                 PathFinder.Grid[x, y] = true;

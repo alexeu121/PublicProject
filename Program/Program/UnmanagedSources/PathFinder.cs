@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PacmanEngine.Components.Base;
 
 namespace Program.UnmanagedSources
@@ -90,6 +87,11 @@ namespace Program.UnmanagedSources
 
         public static Coordinate[] GetPath(Coordinate currentPosition, Coordinate targetPosition)
         {
+            if (currentPosition.X / Coordinate.Multiplier == targetPosition.X / Coordinate.Multiplier &&
+               currentPosition.Y / Coordinate.Multiplier == targetPosition.Y / Coordinate.Multiplier)
+                return null;
+
+
             var squares = CreateGrid();
 
             var finish = squares.Single(sq => sq.X == targetPosition.X / Coordinate.Multiplier && sq.Y == targetPosition.Y / Coordinate.Multiplier);
