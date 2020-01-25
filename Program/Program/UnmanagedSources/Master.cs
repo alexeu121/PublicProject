@@ -45,16 +45,16 @@ namespace Program.UnmanagedSources
 
         public Master()
         {
-            Name = "Master";
+            Name = ObjectsNames.Master;
         }
 
         public Master(IEnumerable<IGameObject> gameObjects)
         {
             _gameObjects = gameObjects;
-            Name = "Master";
+            Name = ObjectsNames.Master;
             pacman = gameObjects.OfType<Pacman>().Single();
-            backgrounds = gameObjects.Where(x => (x.Name == "MazeBlue" || x.Name == "MazeWhite")).ToArray();
-            ghosts = gameObjects.Where(x => (x.Name == "Pinky" || x.Name == "Inky" || x.Name == "Blinky" || x.Name == "Clyde")).ToArray();
+            backgrounds = gameObjects.Where(x => (x.Name == ObjectsNames.MazeBlue || x.Name == ObjectsNames.MazeWhite)).ToArray();
+            ghosts = gameObjects.Where(x => (x.Name == ObjectsNames.Pinky || x.Name == ObjectsNames.Inky || x.Name == ObjectsNames.Blinky || x.Name == ObjectsNames.Clyde)).ToArray();
 
             if (ghosts.Length != 4)
             {
@@ -71,8 +71,8 @@ namespace Program.UnmanagedSources
 
         public override void Update()
         {
-            mazeBlue = _gameObjects.Where(x => x.Name == "MazeBlue").Select(x => x).FirstOrDefault();
-            mazeWhite = _gameObjects.Where(x => x.Name == "MazeWhite").Select(x => x).FirstOrDefault();
+            mazeBlue = _gameObjects.Where(x => x.Name == ObjectsNames.MazeBlue).Select(x => x).FirstOrDefault();
+            mazeWhite = _gameObjects.Where(x => x.Name == ObjectsNames.MazeWhite).Select(x => x).FirstOrDefault();
 
             if (isPacmanEatBigCoin)
             {
@@ -107,7 +107,7 @@ namespace Program.UnmanagedSources
             //    }
             //}
 
-            if (!_gameObjects.Any(x => x.IsEnabled && (x.Name == "BigCoin" || x.Name == "SmallCoin")))
+            if (!_gameObjects.Any(x => x.IsEnabled && (x.Name == ObjectsNames.BigCoin || x.Name == ObjectsNames.SmallCoin)))
             {
                 Animation = AnimationFactory.CreateAnimation(AnimationType.MessageWin);
                 IsEnabled = true;

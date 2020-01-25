@@ -26,7 +26,7 @@ namespace Program.Workspace
     {
         public Coordinate coord { get; set; }
 
-        public InitialData InitData { get; set; }   //properties for initial objects
+        public InitialData InitData { get; set; }
 
     }
 
@@ -46,9 +46,10 @@ namespace Program.Workspace
             //refs=====================
             Pacman pacman = Collection.OfType<Pacman>().FirstOrDefault();
             Master master = new Master(Collection);
-            if (pacman != null) pacman.master = master;          //ref to pacman from master
-            master.Initialize(Collection);         //give collection of all elements to master
+            if (pacman != null) pacman.master = master;          
+                   
             Collection.Add(master);
+            master.Initialize(Collection);  
             //=========================
 
             Engine.Run(Collection);       //when load, transmit collection of objects for show and processing

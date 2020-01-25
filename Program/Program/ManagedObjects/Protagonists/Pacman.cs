@@ -13,7 +13,7 @@ namespace Program.ManagedObjects.Protagonists
 
         private DirectionKeys CurrentDirection = DirectionKeys.None;
 
-        public int Speed { get; set; } = 500000;    //1 cell = 16 pix // 21 x 27 cells
+        public int Speed { get; set; } = 100000;    //1 cell = 16 pix // 21 x 27 cells
 
         public Master master;
 

@@ -65,19 +65,19 @@ namespace Program
                     result.Animation.Location = pt.coord;
                     break;
                 case InitialData.Blinky:
-                    result = new Ghost("Blinky");
+                    result = new Ghost(ObjectsNames.Blinky);
                     result.Animation.Location = pt.coord;
                     break;
                 case InitialData.Pinky:
-                    result = new Ghost("Pinky");
+                    result = new Ghost(ObjectsNames.Pinky);
                     result.Animation.Location = pt.coord;
                     break;
                 case InitialData.Inky:
-                    result = new Ghost("Inky");
+                    result = new Ghost(ObjectsNames.Inky);
                     result.Animation.Location = pt.coord;
                     break;
                 case InitialData.Clyde:
-                    result = new Ghost("Clyde");
+                    result = new Ghost(ObjectsNames.Clyde);
                     result.Animation.Location = pt.coord;
                     break;
                 case InitialData.BigCoin:
@@ -93,19 +93,19 @@ namespace Program
 
         private static void InitSquare(char squareType, int x, int y, List<BaseGameObject> gameObjects)
         {
-            // Wall = 0, Empty = 1, SmallCoin = 2, BigCoin = 3, Pacman = 4, Blinky = 5, Pinky = 6, Inky = 7, Clyde = 8.
-            //switch (squareType)
-            //{
-                //case '2':
-                //    gameObjects.Add(new BaseGameObject(x, y, ObjectNames.Coin, AnimationType.SmallCoin));
-                //    break;
-                //case '3':
-                //    gameObjects.Add(new BaseGameObject(x, y, ObjectNames.BigCoin, AnimationType.BigCoin));
-                //    break;
-                //case '4':
-                //    gameObjects.Add(new BaseGameObjects.Pacman(x, y));
-                //    break;
-            //}
+            //Wall = 0, Empty = 1, SmallCoin = 2, BigCoin = 3, Pacman = 4, Blinky = 5, Pinky = 6, Inky = 7, Clyde = 8
+            switch (squareType)
+            {
+                case '2':
+                    gameObjects.Add(BaseGameObject.CreateStaticObject(AnimationType.SmallCoin, x, y));
+                    break;
+                case '3':
+                    gameObjects.Add(BaseGameObject.CreateStaticObject(AnimationType.BigCoin, x, y));
+                    break;
+                case '4':
+                    gameObjects.Add(BaseGameObject.CreateStaticObject(AnimationType.PacmanRight, x, y));
+                    break;
+            }
 
             if (squareType != '0')
                 PathFinder.Grid[x, y] = true;

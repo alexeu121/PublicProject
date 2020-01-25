@@ -16,7 +16,6 @@ namespace Program.ManagedObjects.Antagonists
         private const int BlueGhostSpeed = Coordinate.Multiplier / 10;
         private const int EyesSpeed = Coordinate.Multiplier / 10;
 
-        public static string name = "Ghost";
         protected Coordinate step;
 
         public Coordinate pacmanCoord;
@@ -40,22 +39,22 @@ namespace Program.ManagedObjects.Antagonists
 
             switch (inpName)
             {
-                case "Blinky":
-                    Name = "Blinky";
+                case ObjectsNames.Blinky:
+                    Name = ObjectsNames.Blinky;
                     Animation = AnimationFactory.CreateAnimation(AnimationType.BlinkyRight);
                     Speed = 70000;
                     break;
-                case "Pinky":
-                    Name = "Pinky";
+                case ObjectsNames.Pinky:
+                    Name = ObjectsNames.Pinky;
                     Animation = AnimationFactory.CreateAnimation(AnimationType.PinkyRight);
                     break;
-                case "Inky":
-                    Name = "Inky";
+                case ObjectsNames.Inky:
+                    Name = ObjectsNames.Inky;
                     Animation = AnimationFactory.CreateAnimation(AnimationType.InkyRight);
                     Speed = 80000;
                     break;
-                case "Clyde":
-                    Name = "Clyde";
+                case ObjectsNames.Clyde:
+                    Name = ObjectsNames.Clyde;
                     Animation = AnimationFactory.CreateAnimation(AnimationType.ClydeRight);
                     break;
             }
