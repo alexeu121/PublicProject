@@ -8,11 +8,8 @@ using Program.ManagedObjects.Protagonists;
 
 namespace Program.UnmanagedSources
 {
-    class Master : BaseGameObject
+    class Master : IGameObject
     {
-        //public List<IGameObject> ManagedObjects;
-        //public Pacman pacman;
-        //public BaseGameObject maze;
         IGameObject mazeBlue;
         IGameObject mazeWhite;
 
@@ -24,7 +21,7 @@ namespace Program.UnmanagedSources
 
         public static Master Instance { get; private set; }
 
-        //public string Name => "Master";
+        public string Name => "Master";
 
         public bool IsEnabled { get { return true; } set { } }          //re use
 
@@ -34,27 +31,23 @@ namespace Program.UnmanagedSources
         private readonly IGameObject[] backgrounds;
         private readonly IGameObject[] ghosts;
 
-        public IEnumerable<IGameObject> _gameObjects;
+        //public IEnumerable<IGameObject> _gameObjects;
 
-        public Coordinate PacmanLocation => pacman.Animation.Location;
+        public Coordinate PacmanLocation;// => pacman.Animation.Location;
 
         public void Initialize(IEnumerable<IGameObject> gameObjects)
         {
             Instance = new Master(gameObjects);
         }
 
-        public Master()
-        {
-            Name = ObjectsNames.Master;
-        }
-
         public Master(IEnumerable<IGameObject> gameObjects)
         {
-            _gameObjects = gameObjects;
-            Name = ObjectsNames.Master;
+            //_gameObjects = gameObjects;
             pacman = gameObjects.OfType<Pacman>().Single();
             backgrounds = gameObjects.Where(x => (x.Name == ObjectsNames.MazeBlue || x.Name == ObjectsNames.MazeWhite)).ToArray();
             ghosts = gameObjects.Where(x => (x.Name == ObjectsNames.Pinky || x.Name == ObjectsNames.Inky || x.Name == ObjectsNames.Blinky || x.Name == ObjectsNames.Clyde)).ToArray();
+
+            PacmanLocation = pacman.Animation.Location;
 
             if (ghosts.Length != 4)
             {
@@ -69,34 +62,35 @@ namespace Program.UnmanagedSources
             #endregion
         }
 
-        public override void Update()
+        public void Update()
         {
-            mazeBlue = _gameObjects.Where(x => x.Name == ObjectsNames.MazeBlue).Select(x => x).FirstOrDefault();
-            mazeWhite = _gameObjects.Where(x => x.Name == ObjectsNames.MazeWhite).Select(x => x).FirstOrDefault();
+            //mazeBlue = _gameObjects.Where(x => x.Name == ObjectsNames.MazeBlue).Select(x => x).FirstOrDefault();
+            //mazeWhite = _gameObjects.Where(x => x.Name == ObjectsNames.MazeWhite).Select(x => x).FirstOrDefault();
 
-            if (isPacmanEatBigCoin)
-            {
-                isEatTimerOn = true;
+            //PacmanLocation = pacman.Animation.Location;
+            //if (isPacmanEatBigCoin)
+            //{
+            //    isEatTimerOn = true;
 
 
-                mazeBlue.IsEnabled = false;
-                mazeWhite.IsEnabled = true;
+            //    mazeBlue.IsEnabled = false;
+            //    mazeWhite.IsEnabled = true;
 
-                isPacmanEatBigCoin = false;
-            }
+            //    isPacmanEatBigCoin = false;
+            //}
 
-            if (isEatTimerOn)
-            {
-                eatTimer += 1;
-            }
+            //if (isEatTimerOn)
+            //{
+            //    eatTimer += 1;
+            //}
 
-            if (eatTimer == 300)
-            {
-                isEatTimerOn = false;
-                eatTimer = 0;
-                mazeBlue.IsEnabled = true;
-                mazeWhite.IsEnabled = false;
-            }
+            //if (eatTimer == 300)
+            //{
+            //    isEatTimerOn = false;
+            //    eatTimer = 0;
+            //    mazeBlue.IsEnabled = true;
+            //    mazeWhite.IsEnabled = false;
+            //}
 
 
             //foreach (var obj in Pacman_collisions)
@@ -107,14 +101,15 @@ namespace Program.UnmanagedSources
             //    }
             //}
 
-            if (!_gameObjects.Any(x => x.IsEnabled && (x.Name == ObjectsNames.BigCoin || x.Name == ObjectsNames.SmallCoin)))
-            {
-                Animation = AnimationFactory.CreateAnimation(AnimationType.MessageWin);
-                IsEnabled = true;
-                
+            //if (!_gameObjects.Any(x => x.IsEnabled && (x.Name == ObjectsNames.BigCoin || x.Name == ObjectsNames.SmallCoin)))
+            //{
+            //    Animation.Location = new Coordinate(13, 11);
 
+            //    Animation newAnimation = AnimationFactory.CreateAnimation(AnimationType.MessageWin);
+            //    newAnimation.Location = Animation.Location;
+            //    Animation = newAnimation;
 
-            }
+            //}
 
         }
 

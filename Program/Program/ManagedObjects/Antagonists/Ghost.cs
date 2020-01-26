@@ -27,38 +27,38 @@ namespace Program.ManagedObjects.Antagonists
 
 
 
-        public Ghost(int x, int y, string name, AnimationType? animationType)// :base(x, y, name, animationType)
+        public Ghost(int x, int y, string name, AnimationType? animationType) :base(x, y, name, animationType)
         {
             pacmanCoord = Master.Instance.PacmanLocation;
         }
 
 
-        public Ghost(string inpName)
-        {
-            IsEnabled = true;
+        //public Ghost(string inpName)
+        //{
+        //    IsEnabled = true;
 
-            switch (inpName)
-            {
-                case ObjectsNames.Blinky:
-                    Name = ObjectsNames.Blinky;
-                    Animation = AnimationFactory.CreateAnimation(AnimationType.BlinkyRight);
-                    Speed = 70000;
-                    break;
-                case ObjectsNames.Pinky:
-                    Name = ObjectsNames.Pinky;
-                    Animation = AnimationFactory.CreateAnimation(AnimationType.PinkyRight);
-                    break;
-                case ObjectsNames.Inky:
-                    Name = ObjectsNames.Inky;
-                    Animation = AnimationFactory.CreateAnimation(AnimationType.InkyRight);
-                    Speed = 80000;
-                    break;
-                case ObjectsNames.Clyde:
-                    Name = ObjectsNames.Clyde;
-                    Animation = AnimationFactory.CreateAnimation(AnimationType.ClydeRight);
-                    break;
-            }
-        }
+        //    switch (inpName)
+        //    {
+        //        case ObjectsNames.Blinky:
+        //            Name = ObjectsNames.Blinky;
+        //            Animation = AnimationFactory.CreateAnimation(AnimationType.BlinkyRight);
+        //            Speed = 70000;
+        //            break;
+        //        case ObjectsNames.Pinky:
+        //            Name = ObjectsNames.Pinky;
+        //            Animation = AnimationFactory.CreateAnimation(AnimationType.PinkyRight);
+        //            break;
+        //        case ObjectsNames.Inky:
+        //            Name = ObjectsNames.Inky;
+        //            Animation = AnimationFactory.CreateAnimation(AnimationType.InkyRight);
+        //            Speed = 80000;
+        //            break;
+        //        case ObjectsNames.Clyde:
+        //            Name = ObjectsNames.Clyde;
+        //            Animation = AnimationFactory.CreateAnimation(AnimationType.ClydeRight);
+        //            break;
+        //    }
+        //}
 
 
 
@@ -78,7 +78,7 @@ namespace Program.ManagedObjects.Antagonists
             {
                 var target = GetTargetCoordinate(Master.Instance.PacmanLocation);
 
-                Coordinate[] path = null;/* = PathFinder.GetPath(Animation.Location, target)*/;
+                Coordinate[] path  = PathFinder.GetPath(Animation.Location, target);
 
                 if (path != null && path.Length > 1)
                 {
