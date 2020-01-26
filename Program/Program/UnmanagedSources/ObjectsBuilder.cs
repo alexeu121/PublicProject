@@ -14,13 +14,57 @@ namespace Program
 {
     public static class ObjectsBuilder
     {
-        public static bool[,] Grid;
-
         public static string mazeData;
 
-        public static  PointData[] InitData;
+        public static List<BaseGameObject> PrepareObjects()
+        {
+            mazeData = ConfigurationManager.AppSettings["MazeData"];
 
-        public static List<IGameObject> objectCol;      // create list of work objects
+            var objects = new List<BaseGameObject>() { new BaseGameObject(0, 0, ObjectsNames.Background, AnimationType.MazeBlue) };
+
+
+
+            foreach (var square in mazeData.Split(' ').SelectMany((row, y) => row.Select((ch, x) => new { ch, x, y })))
+                InitSquare(square.ch, square.x, square.y, objects);
+
+            Master master = new Master(objects);
+            master.Initialize(objects);
+
+            return objects;
+        }
+
+        public static void InitSquare(char squareType, int x, int y, List<BaseGameObject> gameObjects)
+        {
+            //Wall = 0, Empty = 1, SmallCoin = 2, BigCoin = 3, Pacman = 4, Blinky = 5, Pinky = 6, Inky = 7, Clyde = 8
+            switch (squareType)
+            {
+                case '2':
+                    gameObjects.Add(new BaseGameObject(x, y, ObjectsNames.SmallCoin, AnimationType.SmallCoin));
+                    break;
+                case '3':
+                    gameObjects.Add(new BaseGameObject(x, y, ObjectsNames.BigCoin, AnimationType.BigCoin));
+                    break;
+                case '4':
+                    gameObjects.Add(new Pacman(x, y));
+                    break;
+                case '5':
+                    gameObjects.Add(new Ghost(x, y, ObjectsNames.Blinky, AnimationType.BlinkyRight));
+                    break;
+                case '6':
+                    gameObjects.Add(new Ghost(x, y, ObjectsNames.Pinky, AnimationType.PinkyRight));
+                    break;
+                case '7':
+                    gameObjects.Add(new Ghost(x, y, ObjectsNames.Inky, AnimationType.InkyRight));
+                    break;
+                case '8':
+                    gameObjects.Add(new Ghost(x, y, ObjectsNames.Clyde, AnimationType.ClydeRight));
+                    break;
+            }
+
+            if (squareType != '0')
+                PathFinder.Grid[x, y] = true;
+        }
+
 
         //public static List<IGameObject> CreateInitData()
         //{

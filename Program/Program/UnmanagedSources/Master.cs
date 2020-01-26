@@ -10,30 +10,16 @@ namespace Program.UnmanagedSources
 {
     class Master : IGameObject
     {
-        IGameObject mazeBlue;
-        IGameObject mazeWhite;
-
-        public int eatTimer;
-        public bool isEatTimerOn;
-
-        public bool isPacmanEatBigCoin = false;
-        //============================================
-
         public static Master Instance { get; private set; }
-
         public string Name => "Master";
-
         public bool IsEnabled { get { return true; } set { } }          //re use
-
         public Animation Animation { get; set; }   //to show win or lose message
+        public Coordinate PacmanLocation => pacman.Animation.Location;
 
         private readonly Pacman pacman;
         private readonly IGameObject[] backgrounds;
         private readonly IGameObject[] ghosts;
 
-        //public IEnumerable<IGameObject> _gameObjects;
-
-        public Coordinate PacmanLocation;// => pacman.Animation.Location;
 
         public void Initialize(IEnumerable<IGameObject> gameObjects)
         {
@@ -42,24 +28,15 @@ namespace Program.UnmanagedSources
 
         public Master(IEnumerable<IGameObject> gameObjects)
         {
-            //_gameObjects = gameObjects;
             pacman = gameObjects.OfType<Pacman>().Single();
-            backgrounds = gameObjects.Where(x => (x.Name == ObjectsNames.MazeBlue || x.Name == ObjectsNames.MazeWhite)).ToArray();
+            backgrounds = gameObjects.Where(x => (x.Name == ObjectsNames.Background)).ToArray();
             ghosts = gameObjects.Where(x => (x.Name == ObjectsNames.Pinky || x.Name == ObjectsNames.Inky || x.Name == ObjectsNames.Blinky || x.Name == ObjectsNames.Clyde)).ToArray();
-
-            PacmanLocation = pacman.Animation.Location;
 
             if (ghosts.Length != 4)
             {
                 throw new Exception("Wrong number of ghosts!");
             }
-            #region NotUse
-            //eatTimer = 0;
-            //isEatTimerOn = false;
-            //IsEnabled = true;
-            //Name = "Master";
 
-            #endregion
         }
 
         public void Update()

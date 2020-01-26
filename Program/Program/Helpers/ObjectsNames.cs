@@ -10,10 +10,12 @@ namespace Program
     {
         public const string SmallCoin = "SmallCoin";
         public const string BigCoin = "BigCoin";
+        public const string Ghost = "Ghost";
         public const string Pinky = "Pinky";
         public const string Inky = "Inky";
         public const string Blinky = "Blinky";
         public const string Clyde = "Clyde";
+        public const string Background = "Background";
         public const string MazeBlue = "MazeBlue";
         public const string MazeWhite = "MazeWhite";
         public const string Pacman = "Pacman";

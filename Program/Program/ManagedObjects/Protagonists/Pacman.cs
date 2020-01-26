@@ -40,53 +40,53 @@ namespace Program.ManagedObjects.Protagonists
         {
             set
             {
+                //if (CurrentDirection != value && value != DirectionKeys.None)
                 if (alive && value != DirectionKeys.None && (value & CurrentDirection) != CurrentDirection)
                 {
                     Coordinate newStep, position = Animation.Location;
 
-                    if ((value & DirectionKeys.Up) == DirectionKeys.Up)
+                    switch (value)
                     {
-                        newStep = new Coordinate(0, -speed);
-                        if (PathFinder.CanMove(position, newStep))
-                        {
-                            step = newStep;
-                            CurrentDirection = DirectionKeys.Up;
-                            Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanUp);
-                            Animation.Location = position;
-                        }
-                    }
-                    else if ((value & DirectionKeys.Down) == DirectionKeys.Down)
-                    {
-                        newStep = new Coordinate(0, speed);
-                        if (PathFinder.CanMove(position, newStep))
-                        {
-                            step = newStep;
-                            CurrentDirection = DirectionKeys.Down;
-                            Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanDown);
-                            Animation.Location = position;
-                        }
-                    }
-                    if ((value & DirectionKeys.Left) == DirectionKeys.Left)
-                    {
-                        newStep = new Coordinate(-speed, 0);
-                        if (PathFinder.CanMove(position, newStep))
-                        {
-                            step = newStep;
-                            CurrentDirection = DirectionKeys.Up;
-                            Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanLeft);
-                            Animation.Location = position;
-                        }
-                    }
-                    if ((value & DirectionKeys.Right) == DirectionKeys.Right)
-                    {
-                        newStep = new Coordinate(speed, 0);
-                        if (PathFinder.CanMove(position, newStep))
-                        {
-                            step = newStep;
-                            CurrentDirection = DirectionKeys.Right;
-                            Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);
-                            Animation.Location = position;
-                        }
+                        case DirectionKeys.Up:
+                            newStep = new Coordinate(0, -speed);
+                            if (PathFinder.CanMove(position, newStep))
+                            {
+                                step = newStep;
+                                CurrentDirection = DirectionKeys.Up;
+                                Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanUp);
+                                Animation.Location = position;
+                            }
+                            break;
+                        case DirectionKeys.Down:
+                            newStep = new Coordinate(0, speed);
+                            if (PathFinder.CanMove(position, newStep))
+                            {
+                                step = newStep;
+                                CurrentDirection = DirectionKeys.Down;
+                                Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanDown);
+                                Animation.Location = position;
+                            }
+                            break;
+                        case DirectionKeys.Left:
+                            newStep = new Coordinate(-speed, 0);
+                            if (PathFinder.CanMove(position, newStep))
+                            {
+                                step = newStep;
+                                CurrentDirection = DirectionKeys.Up;
+                                Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanLeft);
+                                Animation.Location = position;
+                            }
+                            break;
+                        case DirectionKeys.Right:     
+                            newStep = new Coordinate(speed, 0);
+                            if (PathFinder.CanMove(position, newStep))
+                            {
+                                step = newStep;
+                                CurrentDirection = DirectionKeys.Right;
+                                Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);
+                                Animation.Location = position;
+                            }
+                            break;
                     }
                 }
             }
@@ -103,6 +103,7 @@ namespace Program.ManagedObjects.Protagonists
 
         public override void Update()
         {
+
             if (PathFinder.CanMove(Animation.Location, step))
             {
                 Animation.Location += step;
@@ -112,7 +113,6 @@ namespace Program.ManagedObjects.Protagonists
                 else if (Animation.Location.X < 0)
                     Animation.Location = new Coordinate(Coordinate.WorldWidth, Animation.Location.Y);
             }
-
 
             #region old
             //if (EatTimerOn)
