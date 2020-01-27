@@ -13,7 +13,7 @@ namespace Program.ManagedObjects.Antagonists
         private enum ShostState { Regular, BlueGhost, Eyes }
 
         public float Speed { get; set; } = Coordinate.Multiplier / 10;
-        private const int RegularGhostSpeed = Coordinate.Multiplier / 8;
+        private const int RegularGhostSpeed = Coordinate.Multiplier / 10;
         private const int BlueGhostSpeed = Coordinate.Multiplier / 10;
         private const int EyesSpeed = Coordinate.Multiplier / 10;
         private readonly int speed = RegularGhostSpeed;
@@ -111,6 +111,12 @@ namespace Program.ManagedObjects.Antagonists
                     else if (Animation.Location.X < 0)
                         Animation.Location = new Coordinate(Coordinate.WorldWidth, Animation.Location.Y);
                 }
+            }
+            else
+            {
+                
+                Animation.Location += step;
+
             }
         }
 
