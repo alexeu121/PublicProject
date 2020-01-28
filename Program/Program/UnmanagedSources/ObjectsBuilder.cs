@@ -22,14 +22,18 @@ namespace Program
 
             var objects = new List<BaseGameObject>() { new BaseGameObject(0, 0, ObjectsNames.Background, AnimationType.MazeBlue) };
 
+            objects.Add(new BaseGameObject(0, 0, ObjectsNames.Master, AnimationType.MessageWin));
+
             foreach (var square in mazeData.Split(' ').SelectMany((row, y) => row.Select((ch, x) => new { ch, x, y })))
                 InitSquare(square.ch, square.x, square.y, objects);
 
             Master master = new Master(objects);
             master.Initialize(objects);
 
+            
             return objects;
         }
+
 
         public static void InitSquare(char squareType, int x, int y, List<BaseGameObject> gameObjects)
         {

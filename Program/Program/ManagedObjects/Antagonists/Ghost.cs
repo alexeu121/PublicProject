@@ -13,20 +13,32 @@ namespace Program.ManagedObjects.Antagonists
         public enum GhostState { Regular, BlueGhost, Eyes }
 
  
-        private const int RegularGhostSpeed = Coordinate.Multiplier / 16;
+        private const int RegularGhostSpeed = Coordinate.Multiplier / 20;
         private const int BlueGhostSpeed = Coordinate.Multiplier / 20;
         private const int EyesSpeed = Coordinate.Multiplier / 8;
 
         protected Coordinate step;
+
         protected Direction currentDirection = Direction.down;
+
         public GhostState currentState { get; set; } = GhostState.Regular;
+
+        protected List<Coordinate> GhostsHome = new List<Coordinate>();
 
         protected abstract Animation GetAnimation();
 
         protected abstract Coordinate GetTargetCoordinate(Coordinate pacmanLocation);
         protected abstract Coordinate GetTargetCoordinateInky(Coordinate pacmanLocation, Coordinate blinkyLocation);
 
-        public Ghost(int x, int y, string name, AnimationType? animationType) : base(x, y, name, animationType) { }     
+        public Ghost(int x, int y, string name, AnimationType? animationType) : base(x, y, name, animationType)
+        {
+            GhostsHome.Add(new Coordinate(9 * Coordinate.Multiplier, 12 * Coordinate.Multiplier));
+            GhostsHome.Add(new Coordinate(10 * Coordinate.Multiplier, 12 * Coordinate.Multiplier));
+            GhostsHome.Add(new Coordinate(11 * Coordinate.Multiplier, 12 * Coordinate.Multiplier));
+            GhostsHome.Add(new Coordinate(9 * Coordinate.Multiplier, 13 * Coordinate.Multiplier));
+            GhostsHome.Add(new Coordinate(10 * Coordinate.Multiplier, 13 * Coordinate.Multiplier));
+            GhostsHome.Add(new Coordinate(11 * Coordinate.Multiplier, 13 * Coordinate.Multiplier));
+        }     
 
         public void Collide(IEnumerable<IGameObject> collisions)
         {
@@ -44,6 +56,11 @@ namespace Program.ManagedObjects.Antagonists
             currentState = GhostState.Regular;
         }
 
+        public void setGhostToHome()
+        {
+            currentState = GhostState.Eyes;
+        }
+
         public override void Update()
         {
             if(PathFinder.CanMove(Animation.Location, step))
@@ -52,8 +69,27 @@ namespace Program.ManagedObjects.Antagonists
             if (Animation.Location.isRoundAll())
             {
                 Coordinate target = new Coordinate(0,0);
-                if (currentState == GhostState.BlueGhost)
+
+                if (currentState == GhostState.Regular)
                 {
+                    if (Name == ObjectsNames.Inky)
+                        target = GetTargetCoordinateInky(Master.Instance.PacmanLocation, Master.Instance.BlinkyLocation);
+                    else
+                        target = GetTargetCoordinate(Master.Instance.PacmanLocation);
+
+                    if (Name == ObjectsNames.Clyde)
+                        target = CheckTargetForClyde(target);
+                }
+                else
+                {
+                    if (currentState == GhostState.Eyes)
+                    {
+                        var Loc = new Coordinate(Animation.Location.X, Animation.Location.Y);
+                        if (GhostsHome.Contains(Loc))
+                            currentState = GhostState.Regular;
+
+                    }
+
                     switch(Name)
                     {
                         case ObjectsNames.Inky:
@@ -70,16 +106,6 @@ namespace Program.ManagedObjects.Antagonists
                             break;
 
                     }
-                }
-                else if (currentState == GhostState.Regular)
-                {
-                    if (Name == ObjectsNames.Inky)
-                        target = GetTargetCoordinateInky(Master.Instance.PacmanLocation, Master.Instance.BlinkyLocation);
-                    else
-                        target = GetTargetCoordinate(Master.Instance.PacmanLocation);
-
-                    if (Name == ObjectsNames.Clyde)
-                        target = CheckTargetForClyde(target);
                 }
 
                 var path = PathFinder.GetPath(Animation.Location, target);
@@ -102,58 +128,7 @@ namespace Program.ManagedObjects.Antagonists
                         Animation = GetAnimation();
                         Animation.Location = currentPosition;
                     }
-                    
-                    #region old
-                    //Coordinate newStep, position = Animation.Location;
-
-                    //if (newDirection == Direction.right)
-                    //{
-                    //    newStep = new Coordinate(speed, 0);
-                    //    if (PathFinder.CanMove(position, newStep))
-                    //    {
-                    //        step = newStep;
-                    //        Animation = AnimationFactory.CreateAnimation(GetAnimation(newDirection, Name));
-                    //        Animation.Location = position;
-                    //    }
-                    //}
-                    //else if (newDirection == Direction.left)
-                    //{
-                    //    newStep = new Coordinate(-speed, 0);
-                    //    if (PathFinder.CanMove(position, newStep))
-                    //    {
-                    //        step = newStep;
-                    //        Animation = AnimationFactory.CreateAnimation(GetAnimation(newDirection, Name));
-                    //        Animation.Location = position;
-                    //    }
-                    //}
-                    //else if (newDirection == Direction.down)
-                    //{
-                    //    newStep = new Coordinate(0, speed);
-                    //    if (PathFinder.CanMove(position, newStep))
-                    //    {
-                    //        step = newStep;
-                    //        Animation = AnimationFactory.CreateAnimation(GetAnimation(newDirection, Name));
-                    //        Animation.Location = position;
-                    //    }
-                    //}
-                    //else if (newDirection == Direction.up)
-                    //{
-                    //    newStep = new Coordinate(0, -speed);
-                    //    if (PathFinder.CanMove(position, newStep))
-                    //    {
-                    //        step = newStep;
-                    //        Animation = AnimationFactory.CreateAnimation(GetAnimation(newDirection, Name));
-                    //        Animation.Location = position;
-                    //    }
-                    //}
-
-                    //Animation.Location += step;
-
-                    //if (Animation.Location.X >= Coordinate.WorldWidth)
-                    //    Animation.Location = new Coordinate(0, Animation.Location.Y);
-                    //else if (Animation.Location.X < 0)
-                    //    Animation.Location = new Coordinate(Coordinate.WorldWidth, Animation.Location.Y);
-                    #endregion
+                   
                 }
             }
         }

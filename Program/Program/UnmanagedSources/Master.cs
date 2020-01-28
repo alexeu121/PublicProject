@@ -21,8 +21,10 @@ namespace Program.UnmanagedSources
         //public bool PacmanCoinTimerOn;
 
         private readonly Pacman pacman;
+        private readonly BaseGameObject message;
         private readonly BaseGameObject[] ghosts;
         private readonly BaseGameObject backgrounds;
+        private readonly BaseGameObject[] coins;
 
         public Coordinate PacmanLocation { get { return pacman != null ? pacman.Animation.Location : new Coordinate(0, 0); } }
 
@@ -94,19 +96,46 @@ namespace Program.UnmanagedSources
             }
         }
 
+        public void isPacmanEatGhost(string ghostName)
+        {
+            (Instance.ghosts.Where(x => x.Name == ghostName).First() as Ghost).setGhostToHome();
+        }
+
+        public void isPacmanDeath()
+        {
+            Instance.message.Animation = AnimationFactory.CreateAnimation(AnimationType.MessageLose);
+            Instance.message.Animation.Location = CoordinateExtension.MessagePosition;
+            Instance.message.IsEnabled = true;
+
+           // Instance.pacman.Reset();
+        }
+
+        public bool CheckCoins()
+        {
+            if (Instance.coins.Where(x => x.IsEnabled == true).Count() == 0)
+            {
+                Instance.message.IsEnabled = true;
+            }
+            return true;
+        }
 
         public void Initialize(IEnumerable<BaseGameObject> gameObjects)
         {
             Instance = new Master(gameObjects);
+            Instance.message.Animation.Location = CoordinateExtension.MessagePosition;
+            Instance.message.IsEnabled = false;
         }
 
         public Master(IEnumerable<BaseGameObject> gameObjects)
         {
+            message = gameObjects.Where(x => x.Name == ObjectsNames.Master).First();
             pacman = gameObjects.OfType<Pacman>().Single();
             backgrounds = gameObjects.Where(x => (x.Name == ObjectsNames.Background)).Single();
             ghosts = gameObjects.Where(x => (x.Name == ObjectsNames.Pinky || x.Name == ObjectsNames.Inky || x.Name == ObjectsNames.Blinky || x.Name == ObjectsNames.Clyde)).ToArray();
-
+            coins = gameObjects.Where(x => x.Name == ObjectsNames.BigCoin || x.Name == ObjectsNames.SmallCoin).ToArray();
         }
+
+
 
         public void Update()
         { }

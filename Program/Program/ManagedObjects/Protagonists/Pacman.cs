@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using PacmanEngine.Components.Actors;
 using PacmanEngine.Components.Base;
 using PacmanEngine.Components.Graphics;
+using Program.ManagedObjects.Antagonists;
 using Program.UnmanagedSources;
 
 namespace Program.ManagedObjects.Protagonists
@@ -43,11 +44,24 @@ namespace Program.ManagedObjects.Protagonists
                     Master.Instance.isPacmanEatBigCoin(CoinTimerOn);
                 }
 
-                if (obj.Name == ObjectsNames.Pinky ||
+                if ((obj.Name == ObjectsNames.Pinky ||
                    obj.Name == ObjectsNames.Blinky ||
                    obj.Name == ObjectsNames.Inky ||
-                   obj.Name == ObjectsNames.Clyde)
-                { }
+                   obj.Name == ObjectsNames.Clyde))
+                {
+                    if (CoinTimerOn)
+                        Master.Instance.isPacmanEatGhost(obj.Name);
+                    else
+                    {
+                        var deathAnim = AnimationFactory.CreateAnimation(AnimationType.PacmanDeathUp);
+                        Coordinate loc = Animation.Location;
+                        Animation = deathAnim;
+                        Animation.Location = loc;
+                        Master.Instance.isPacmanDeath();
+
+                    }
+
+                }
 
             }
             
@@ -57,14 +71,18 @@ namespace Program.ManagedObjects.Protagonists
         public override void Update()
         {
             CheckTimer();
-
+            
 
             DirectionKeys NewDirection = DirectionKeys.None;
             bool isRoad = false;
 
             //find new pressed key of direction
             if ((Animation.Location.X % Coordinate.Multiplier == 0) && (Animation.Location.Y % Coordinate.Multiplier == 0))
-                {
+            {
+
+                Master.Instance.CheckCoins();
+
+
                 if ((PressedKeys & DirectionKeys.Left) == DirectionKeys.Left)
                     NewDirection = DirectionKeys.Left;
                 else if ((PressedKeys & DirectionKeys.Right) == DirectionKeys.Right)
@@ -166,7 +184,7 @@ namespace Program.ManagedObjects.Protagonists
             if (CoinTimerOn)
                 CoinTimer += 1;
 
-            if (CoinTimer == 480)
+            if (CoinTimer == 600)
             {
                 CoinTimerOn = false;
                 CoinTimer = 0;
