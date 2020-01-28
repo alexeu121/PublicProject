@@ -22,8 +22,6 @@ namespace Program
 
             var objects = new List<BaseGameObject>() { new BaseGameObject(0, 0, ObjectsNames.Background, AnimationType.MazeBlue) };
 
-
-
             foreach (var square in mazeData.Split(' ').SelectMany((row, y) => row.Select((ch, x) => new { ch, x, y })))
                 InitSquare(square.ch, square.x, square.y, objects);
 

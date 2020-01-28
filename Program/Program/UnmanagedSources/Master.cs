@@ -21,7 +21,7 @@ namespace Program.UnmanagedSources
         //public bool PacmanCoinTimerOn;
 
         private readonly Pacman pacman;
-        private readonly IGameObject[] ghosts;
+        private readonly BaseGameObject[] ghosts;
         private readonly BaseGameObject backgrounds;
 
         public Coordinate PacmanLocation { get { return pacman != null ? pacman.Animation.Location : new Coordinate(0, 0); } }
@@ -80,23 +80,18 @@ namespace Program.UnmanagedSources
 
             if (CoinTimerOn)
             {
+                foreach (var obj in Instance.ghosts)
+                { (obj as Ghost).SetBlueState();  }
+
                 Instance.backgrounds.Animation = mazeWhite;
             }
             else
+            {
+                foreach (var obj in Instance.ghosts)
+                { (obj as Ghost).SetRegularState(); }
                 Instance.backgrounds.Animation = mazeBlue;
 
-
-            //var animationBackgound = AnimationFactory.CreateAnimation(AnimationType.MazeWhite);
-            //AnimationType animationType = AnimationType.BlueGhost;
-            //if ()
-            //{
-            //    var a = Blinky.GhostState.Regular;
-            //    a = changedGhostStateToBlueGhost;
-            //    Pinky.GhostState.BlueGhost;
-            //    Inky.GhostState.BlueGhost;
-            //    Clyde.GhostState.BlueGhost;
-            //}
-            //Animation.Location = new Coordinate(0, 0);
+            }
         }
 
 

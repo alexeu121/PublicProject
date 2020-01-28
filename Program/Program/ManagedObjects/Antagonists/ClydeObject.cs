@@ -12,10 +12,14 @@ namespace Program.ManagedObjects.Antagonists
     class ClydeObject : Ghost
     {
         public ClydeObject(int x, int y) : base(x, y, ObjectsNames.Clyde, AnimationType.ClydeDown) { }
+     
 
+       
         protected override Animation GetAnimation()
         {
             AnimationType animationType = AnimationType.BlueGhost;
+
+            
 
             if (currentState == GhostState.Regular)
             {

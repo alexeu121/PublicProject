@@ -166,7 +166,7 @@ namespace Program.ManagedObjects.Protagonists
             if (CoinTimerOn)
                 CoinTimer += 1;
 
-            if (CoinTimer == 240)
+            if (CoinTimer == 480)
             {
                 CoinTimerOn = false;
                 CoinTimer = 0;

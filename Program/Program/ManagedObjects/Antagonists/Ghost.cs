@@ -13,35 +13,35 @@ namespace Program.ManagedObjects.Antagonists
         public enum GhostState { Regular, BlueGhost, Eyes }
 
  
-        private const int RegularGhostSpeed = Coordinate.Multiplier / 20;
-        private const int BlueGhostSpeed = Coordinate.Multiplier / 10;
-        private const int EyesSpeed = Coordinate.Multiplier / 10;
+        private const int RegularGhostSpeed = Coordinate.Multiplier / 16;
+        private const int BlueGhostSpeed = Coordinate.Multiplier / 20;
+        private const int EyesSpeed = Coordinate.Multiplier / 8;
 
         protected Coordinate step;
         protected Direction currentDirection = Direction.down;
-        public GhostState currentState = GhostState.Regular;
-
-        public Coordinate pacmanCoord;
-
-        //private bool alive;
-        //private static List<Animation> changedAnimations;
+        public GhostState currentState { get; set; } = GhostState.Regular;
 
         protected abstract Animation GetAnimation();
 
         protected abstract Coordinate GetTargetCoordinate(Coordinate pacmanLocation);
         protected abstract Coordinate GetTargetCoordinateInky(Coordinate pacmanLocation, Coordinate blinkyLocation);
 
-        public Ghost(int x, int y, string name, AnimationType? animationType) : base(x, y, name, animationType)
-        {
-            pacmanCoord = new Coordinate(10 * Coordinate.Multiplier, 20 * Coordinate.Multiplier);//Master.Instance.PacmanLocation;
-        }
-
+        public Ghost(int x, int y, string name, AnimationType? animationType) : base(x, y, name, animationType) { }     
 
         public void Collide(IEnumerable<IGameObject> collisions)
         {
             foreach (var obj in collisions)
                 if (obj.Name == ObjectsNames.Pacman)
                 { }
+        }
+
+        public  void SetBlueState()
+        {
+            currentState = GhostState.BlueGhost;
+        }
+        public void SetRegularState()
+        {
+            currentState = GhostState.Regular;
         }
 
         public override void Update()
@@ -51,17 +51,36 @@ namespace Program.ManagedObjects.Antagonists
 
             if (Animation.Location.isRoundAll())
             {
-                Coordinate target;
+                Coordinate target = new Coordinate(0,0);
+                if (currentState == GhostState.BlueGhost)
+                {
+                    switch(Name)
+                    {
+                        case ObjectsNames.Inky:
+                            target = new Coordinate(10 * Coordinate.Multiplier, 13 * Coordinate.Multiplier);
+                            break;
+                        case ObjectsNames.Blinky:
+                            target = new Coordinate(10 * Coordinate.Multiplier, 12 * Coordinate.Multiplier);
+                            break;
+                        case ObjectsNames.Pinky:
+                            target = new Coordinate(9 * Coordinate.Multiplier, 13 * Coordinate.Multiplier);
+                            break;
+                        case ObjectsNames.Clyde:
+                            target = new Coordinate(11 * Coordinate.Multiplier, 13 * Coordinate.Multiplier);
+                            break;
 
-                if (Name == ObjectsNames.Inky)
-                    target = GetTargetCoordinateInky(Master.Instance.PacmanLocation, Master.Instance.BlinkyLocation); 
-                else
-                    target = GetTargetCoordinate(Master.Instance.PacmanLocation);
+                    }
+                }
+                else if (currentState == GhostState.Regular)
+                {
+                    if (Name == ObjectsNames.Inky)
+                        target = GetTargetCoordinateInky(Master.Instance.PacmanLocation, Master.Instance.BlinkyLocation);
+                    else
+                        target = GetTargetCoordinate(Master.Instance.PacmanLocation);
 
-                if (Name == ObjectsNames.Clyde)
-                    target = CheckTargetForClyde(target);
-
-
+                    if (Name == ObjectsNames.Clyde)
+                        target = CheckTargetForClyde(target);
+                }
 
                 var path = PathFinder.GetPath(Animation.Location, target);
 
