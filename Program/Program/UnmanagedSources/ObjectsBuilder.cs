@@ -48,16 +48,16 @@ namespace Program
                     gameObjects.Add(new Pacman(x, y));
                     break;
                 case '5':
-                    gameObjects.Add(new Ghost(x, y, ObjectsNames.Blinky, AnimationType.BlinkyRight));
+                    gameObjects.Add(new BlinkyObject(x, y));
                     break;
                 case '6':
-                    gameObjects.Add(new Ghost(x, y, ObjectsNames.Pinky, AnimationType.PinkyRight));
+                    gameObjects.Add(new PinkyObject(x, y));
                     break;
                 case '7':
-                    gameObjects.Add(new Ghost(x, y, ObjectsNames.Inky, AnimationType.InkyRight));
+                    gameObjects.Add(new InkyObject(x, y));
                     break;
                 case '8':
-                    gameObjects.Add(new Ghost(x, y, ObjectsNames.Clyde, AnimationType.ClydeRight));
+                    gameObjects.Add(new ClydeObject(x, y));
                     break;
             }
 
@@ -65,7 +65,7 @@ namespace Program
                 PathFinder.Grid[x, y] = true;
         }
 
-
+        #region old
         //public static List<IGameObject> CreateInitData()
         //{
         //    Grid = new bool[21, 27];        //grid for walls, data from App.Config file
@@ -134,7 +134,7 @@ namespace Program
         //    }
         //    return result;
         //}
-
+        #endregion
 
     }
 }

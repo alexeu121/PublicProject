@@ -7,28 +7,30 @@ using Program.UnmanagedSources;
 
 namespace Program.ManagedObjects.Antagonists
 {
-    class Ghost : BaseGameObject
+    abstract class Ghost : BaseGameObject
     {
-        private enum Direction { up, down, left, right }
-        private enum ShostState { Regular, BlueGhost, Eyes }
+        protected enum Direction { up, down, left, right }
+        protected enum GhostState { Regular, BlueGhost, Eyes }
 
         public float Speed { get; set; } = Coordinate.Multiplier / 10;
-        private const int RegularGhostSpeed = Coordinate.Multiplier / 10;
+        private const int RegularGhostSpeed = Coordinate.Multiplier / 20;
         private const int BlueGhostSpeed = Coordinate.Multiplier / 10;
         private const int EyesSpeed = Coordinate.Multiplier / 10;
         private readonly int speed = RegularGhostSpeed;
 
 
         protected Coordinate step;
+        protected Direction currentDirection = Direction.down;
+        protected GhostState currentState = GhostState.Regular;
 
         public Coordinate pacmanCoord;
-        private bool alive;
-        private static List<Animation> changedAnimations;
+        //private bool alive;
+        //private static List<Animation> changedAnimations;
 
-        //protected Animation GetAnimation() { }
+        protected abstract Animation GetAnimation();
 
-        protected Coordinate GetTargetCoordinate(Coordinate pacmanLocation) { return pacmanCoord; }
-       
+        protected abstract Coordinate GetTargetCoordinate(Coordinate pacmanLocation);  // { return pacmanCoord; }
+        protected abstract Coordinate GetTargetCoordinate2(Coordinate pacmanLocation, Coordinate blinkyLocation);
 
         public Ghost(int x, int y, string name, AnimationType? animationType) : base(x, y, name, animationType)
         {
@@ -45,10 +47,22 @@ namespace Program.ManagedObjects.Antagonists
 
         public override void Update()
         {
+            if(PathFinder.CanMove(Animation.Location, step))
+                Animation.Location += step;
+
             if (Animation.Location.isRoundAll())
             {
+                Coordinate target;
 
-                var target = GetTargetCoordinate(Master.Instance.PacmanLocation);
+                if (Name == ObjectsNames.Inky)
+                    target = GetTargetCoordinate2(Master.Instance.PacmanLocation, Master.Instance.BlinkyLocation); 
+                else
+                    target = GetTargetCoordinate(Master.Instance.PacmanLocation);
+
+                if (Name == ObjectsNames.Clyde)
+                    target = CheckTargetForClyde(target);
+
+
 
                 var path = PathFinder.GetPath(Animation.Location, target);
 
@@ -61,63 +75,101 @@ namespace Program.ManagedObjects.Antagonists
                         moveVector.X < 0 ? Direction.left :
                         moveVector.Y > 0 ? Direction.down : Direction.up;
 
-                    Coordinate newStep, position = Animation.Location;
+                    if (newDirection != currentDirection)
+                    {
+                        currentDirection = newDirection;
+                        step = GetStep();
 
-                    if (newDirection == Direction.right)
-                    {
-                        newStep = new Coordinate(speed, 0);
-                        if (PathFinder.CanMove(position, newStep))
-                        {
-                            step = newStep;
-                            Animation = AnimationFactory.CreateAnimation(GetAnimation(newDirection, Name));
-                            Animation.Location = position;
-                        }
+                        var currentPosition = Animation.Location;
+                        Animation = GetAnimation();
+                        Animation.Location = currentPosition;
                     }
-                    else if (newDirection == Direction.left)
-                    {
-                        newStep = new Coordinate(-speed, 0);
-                        if (PathFinder.CanMove(position, newStep))
-                        {
-                            step = newStep;
-                            Animation = AnimationFactory.CreateAnimation(GetAnimation(newDirection, Name));
-                            Animation.Location = position;
-                        }
-                    }
-                    else if (newDirection == Direction.down)
-                    {
-                        newStep = new Coordinate(0, speed);
-                        if (PathFinder.CanMove(position, newStep))
-                        {
-                            step = newStep;
-                            Animation = AnimationFactory.CreateAnimation(GetAnimation(newDirection, Name));
-                            Animation.Location = position;
-                        }
-                    }
-                    else if (newDirection == Direction.up)
-                    {
-                        newStep = new Coordinate(0, -speed);
-                        if (PathFinder.CanMove(position, newStep))
-                        {
-                            step = newStep;
-                            Animation = AnimationFactory.CreateAnimation(GetAnimation(newDirection, Name));
-                            Animation.Location = position;
-                        }
-                    }
+                    
+                    #region old
+                    //Coordinate newStep, position = Animation.Location;
 
-                    Animation.Location += step;
+                    //if (newDirection == Direction.right)
+                    //{
+                    //    newStep = new Coordinate(speed, 0);
+                    //    if (PathFinder.CanMove(position, newStep))
+                    //    {
+                    //        step = newStep;
+                    //        Animation = AnimationFactory.CreateAnimation(GetAnimation(newDirection, Name));
+                    //        Animation.Location = position;
+                    //    }
+                    //}
+                    //else if (newDirection == Direction.left)
+                    //{
+                    //    newStep = new Coordinate(-speed, 0);
+                    //    if (PathFinder.CanMove(position, newStep))
+                    //    {
+                    //        step = newStep;
+                    //        Animation = AnimationFactory.CreateAnimation(GetAnimation(newDirection, Name));
+                    //        Animation.Location = position;
+                    //    }
+                    //}
+                    //else if (newDirection == Direction.down)
+                    //{
+                    //    newStep = new Coordinate(0, speed);
+                    //    if (PathFinder.CanMove(position, newStep))
+                    //    {
+                    //        step = newStep;
+                    //        Animation = AnimationFactory.CreateAnimation(GetAnimation(newDirection, Name));
+                    //        Animation.Location = position;
+                    //    }
+                    //}
+                    //else if (newDirection == Direction.up)
+                    //{
+                    //    newStep = new Coordinate(0, -speed);
+                    //    if (PathFinder.CanMove(position, newStep))
+                    //    {
+                    //        step = newStep;
+                    //        Animation = AnimationFactory.CreateAnimation(GetAnimation(newDirection, Name));
+                    //        Animation.Location = position;
+                    //    }
+                    //}
 
-                    if (Animation.Location.X >= Coordinate.WorldWidth)
-                        Animation.Location = new Coordinate(0, Animation.Location.Y);
-                    else if (Animation.Location.X < 0)
-                        Animation.Location = new Coordinate(Coordinate.WorldWidth, Animation.Location.Y);
+                    //Animation.Location += step;
+
+                    //if (Animation.Location.X >= Coordinate.WorldWidth)
+                    //    Animation.Location = new Coordinate(0, Animation.Location.Y);
+                    //else if (Animation.Location.X < 0)
+                    //    Animation.Location = new Coordinate(Coordinate.WorldWidth, Animation.Location.Y);
+                    #endregion
                 }
             }
-            else
-            {
-                
-                Animation.Location += step;
+        }
 
+        public Coordinate GetStep()
+        { 
+            int currentSpeed;
+            switch (currentState)
+            {
+                case GhostState.BlueGhost:
+                    currentSpeed = BlueGhostSpeed;
+                    break;
+                case GhostState.Eyes:
+                    currentSpeed = EyesSpeed;
+                    break;
+                case GhostState.Regular:
+                    currentSpeed = RegularGhostSpeed;
+                    break;
+                default:
+                    throw new Exception("unknown state");
             }
+
+            switch (currentDirection)
+            {
+                case Direction.up:
+                    return new Coordinate(0, -currentSpeed);
+                case Direction.down:
+                    return new Coordinate(0, currentSpeed);
+                case Direction.left:
+                    return new Coordinate(-currentSpeed, 0);
+                case Direction.right:
+                    return new Coordinate(currentSpeed, 0);
+            }
+            throw new Exception("");
         }
 
         private AnimationType GetAnimation(Direction direction, string Name)
@@ -168,6 +220,21 @@ namespace Program.ManagedObjects.Antagonists
                     break;
             }
             return res;
+        }
+
+        public Coordinate CheckTargetForClyde(Coordinate target)
+        {
+            Coordinate result;
+
+            if ((Math.Abs(Animation.Location.X - target.X) < 8 * Coordinate.Multiplier) && (Math.Abs(Animation.Location.Y - target.Y) < 8 * Coordinate.Multiplier))
+            {
+                result = new Coordinate(Coordinate.Multiplier, Coordinate.Multiplier * 25);
+            }
+            else
+            {
+                result = target;
+            }
+            return result;
         }
     }
 }

@@ -68,6 +68,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\ObjectsNames.cs" />
+    <Compile Include="ManagedObjects\Antagonists\BlinkyObject.cs" />
+    <Compile Include="ManagedObjects\Antagonists\ClydeObject.cs" />
+    <Compile Include="ManagedObjects\Antagonists\InkyObject.cs" />
+    <Compile Include="ManagedObjects\Antagonists\PinkyObject.cs" />
     <Compile Include="UnmanagedSources\BaseGameObject.cs" />
     <Compile Include="ManagedObjects\Antagonists\Ghost.cs" />
     <Compile Include="ManagedObjects\Protagonists\Pacman.cs" />

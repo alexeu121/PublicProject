@@ -4,6 +4,7 @@ using System.Linq;
 using PacmanEngine.Components.Actors;
 using PacmanEngine.Components.Base;
 using PacmanEngine.Components.Graphics;
+using Program.ManagedObjects.Antagonists;
 using Program.ManagedObjects.Protagonists;
 
 namespace Program.UnmanagedSources
@@ -14,7 +15,54 @@ namespace Program.UnmanagedSources
         public string Name => "Master";
         public bool IsEnabled { get { return true; } set { } }          //re use
         public Animation Animation { get; set; }   //to show win or lose message
-        public Coordinate PacmanLocation => pacman.Animation.Location;
+
+        public Coordinate PacmanLocation { get { return pacman != null ? pacman.Animation.Location : new Coordinate(0, 0); } }
+        public Coordinate BlinkyLocation { get { return ghosts.OfType<BlinkyObject>().Single() != null ? ghosts.OfType<BlinkyObject>().Single().Animation.Location : new Coordinate(0, 0); } }
+
+        public Coordinate PacmanDirection
+        {
+            get
+            {
+                if (pacman != null)
+                {
+                    switch (pacman.Animation.AnimationType)
+                    {
+                        case AnimationType.PacmanDown:
+                            return Coordinate.UnitY;
+                        case AnimationType.PacmanUp:
+                            return -Coordinate.UnitY;
+                        case AnimationType.PacmanLeft:
+                            return -Coordinate.UnitX;
+                        default:
+                            return Coordinate.UnitX;
+                    }
+                }
+                else
+                { return -Coordinate.UnitY; }
+            }
+        }
+
+        public Coordinate BlinkyDirection
+        {
+            get
+            {
+                if (ghosts.OfType<BlinkyObject>().Single() != null)
+                {
+                    switch (ghosts.OfType<BlinkyObject>().Single().Animation.AnimationType)
+                    {
+                        case AnimationType.BlinkyDown:
+                            return Coordinate.UnitY;
+                        case AnimationType.BlinkyUp:
+                            return -Coordinate.UnitY;
+                        case AnimationType.BlinkyLeft:
+                            return -Coordinate.UnitX;
+                        default:
+                            return Coordinate.UnitX;
+                    }
+                }
+                else { return -Coordinate.UnitX; }
+            }
+        }
 
         private readonly Pacman pacman;
         private readonly IGameObject[] backgrounds;
@@ -32,15 +80,12 @@ namespace Program.UnmanagedSources
             backgrounds = gameObjects.Where(x => (x.Name == ObjectsNames.Background)).ToArray();
             ghosts = gameObjects.Where(x => (x.Name == ObjectsNames.Pinky || x.Name == ObjectsNames.Inky || x.Name == ObjectsNames.Blinky || x.Name == ObjectsNames.Clyde)).ToArray();
 
-            if (ghosts.Length != 4)
-            {
-                throw new Exception("Wrong number of ghosts!");
-            }
-
         }
 
         public void Update()
         {
+
+            #region old
             //mazeBlue = _gameObjects.Where(x => x.Name == ObjectsNames.MazeBlue).Select(x => x).FirstOrDefault();
             //mazeWhite = _gameObjects.Where(x => x.Name == ObjectsNames.MazeWhite).Select(x => x).FirstOrDefault();
 
@@ -87,7 +132,7 @@ namespace Program.UnmanagedSources
             //    Animation = newAnimation;
 
             //}
-
+            #endregion
         }
 
 

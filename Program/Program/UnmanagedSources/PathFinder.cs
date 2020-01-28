@@ -8,6 +8,15 @@ namespace Program.UnmanagedSources
     {
         public static bool[,] Grid = new bool[Coordinate.WorldWidth / Coordinate.Multiplier, Coordinate.WorldHeight / Coordinate.Multiplier];
 
+        public static bool isSquareEmpty(Coordinate coordinate)
+        {
+            var x = ((Coordinate.WorldWidth + coordinate.X) % Coordinate.WorldWidth) / Coordinate.Multiplier;
+            var y = ((Coordinate.WorldWidth + coordinate.Y) % Coordinate.WorldHeight) / Coordinate.Multiplier;
+
+            return Grid[x, y];
+
+        }
+
         public static bool CanMove(Coordinate position, Coordinate direction)
         {
             var roundX = position.X % Coordinate.Multiplier == 0;
@@ -93,6 +102,17 @@ namespace Program.UnmanagedSources
 
 
             var squares = CreateGrid();
+
+            if (targetPosition.X > Coordinate.WorldWidth - Coordinate.Multiplier)
+                targetPosition.X = Coordinate.WorldWidth - Coordinate.Multiplier;
+            else if (targetPosition.X < 0)
+                targetPosition.X = 0;
+
+            if (targetPosition.Y > Coordinate.WorldHeight - Coordinate.Multiplier)
+                targetPosition.Y = Coordinate.WorldHeight - Coordinate.Multiplier; 
+            else if (targetPosition.Y < 0)
+                targetPosition.Y = 0;
+
 
             var finish = squares.Single(sq => sq.X == targetPosition.X / Coordinate.Multiplier && sq.Y == targetPosition.Y / Coordinate.Multiplier);
             var start = squares.Single(sq => sq.X == currentPosition.X / Coordinate.Multiplier && sq.Y == currentPosition.Y / Coordinate.Multiplier);
