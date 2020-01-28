@@ -15,6 +15,9 @@ namespace Program.ManagedObjects.Protagonists
         private bool alive = true;
         private Coordinate step;
 
+        private int CoinTimer;
+        private bool CoinTimerOn;
+
         public Master master;
 
         private bool[,] Grid = new bool[Coordinate.WorldWidth / Coordinate.Multiplier, Coordinate.WorldHeight / Coordinate.Multiplier];
@@ -22,92 +25,39 @@ namespace Program.ManagedObjects.Protagonists
         public Pacman(int x, int y) : base(x, y, ObjectsNames.Pacman, AnimationType.PacmanUp)
         {
             Grid = PathFinder.Grid;
+            CoinTimer = 0; CoinTimerOn = false;
         }
 
         public DirectionKeys PressedKeys { get; set; }
-
-        #region new Moving method
-        //public DirectionKeys PressedKeys
-        //{
-        //    set
-        //    {
-        //        if (alive && value != DirectionKeys.None && (value & CurrentDirection) != CurrentDirection)
-        //        {
-        //            Coordinate newStep, position = Animation.Location;
-
-        //            switch (value)
-        //            {
-        //                case DirectionKeys.Up:
-        //                    newStep = new Coordinate(0, -speed);
-        //                    if (PathFinder.CanMove(position, newStep))
-        //                    {
-        //                        step = newStep;
-        //                        CurrentDirection = DirectionKeys.Up;
-        //                        Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanUp);
-        //                        Animation.Location = position;
-        //                    }
-        //                    break;
-        //                case DirectionKeys.Down:
-        //                    newStep = new Coordinate(0, speed);
-        //                    if (PathFinder.CanMove(position, newStep))
-        //                    {
-        //                        step = newStep;
-        //                        CurrentDirection = DirectionKeys.Down;
-        //                        Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanDown);
-        //                        Animation.Location = position;
-        //                    }
-        //                    break;
-        //                case DirectionKeys.Left:
-        //                    newStep = new Coordinate(-speed, 0);
-        //                    if (PathFinder.CanMove(position, newStep))
-        //                    {
-        //                        step = newStep;
-        //                        CurrentDirection = DirectionKeys.Up;
-        //                        Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanLeft);
-        //                        Animation.Location = position;
-        //                    }
-        //                    break;
-        //                case DirectionKeys.Right:     
-        //                    newStep = new Coordinate(speed, 0);
-        //                    if (PathFinder.CanMove(position, newStep))
-        //                    {
-        //                        step = newStep;
-        //                        CurrentDirection = DirectionKeys.Right;
-        //                        Animation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);
-        //                        Animation.Location = position;
-        //                    }
-        //                    break;
-        //            }
-        //        }
-        //    }
-        //}
-        #endregion
-
+        
         public void Collide(IEnumerable<IGameObject> collisions)
         {
             foreach (var obj in collisions)
+            {
                 if (obj.Name == ObjectsNames.SmallCoin || obj.Name == ObjectsNames.BigCoin)
                     obj.IsEnabled = false;
+
+                if (obj.Name == ObjectsNames.BigCoin)
+                {
+                    CoinTimerOn = true;
+                    Master.Instance.isPacmanEatBigCoin(CoinTimerOn);
+                }
+
+                if (obj.Name == ObjectsNames.Pinky ||
+                   obj.Name == ObjectsNames.Blinky ||
+                   obj.Name == ObjectsNames.Inky ||
+                   obj.Name == ObjectsNames.Clyde)
+                { }
+
+            }
+            
         }
 
 
         public override void Update()
         {
-            #region new Moving method
-            //if (PathFinder.CanMove(Animation.Location, step))
-            //{
-            //    Animation.Location += step;
+            CheckTimer();
 
-            //    if (Animation.Location.X >= Coordinate.WorldWidth)
-            //        Animation.Location = new Coordinate(0, Animation.Location.Y);
-            //    else if (Animation.Location.X < 0)
-            //        Animation.Location = new Coordinate(Coordinate.WorldWidth, Animation.Location.Y);
-            //}
-            #endregion
-
-            #region old
-            //if (EatTimerOn)
-            //    EatTimer += 1;
 
             DirectionKeys NewDirection = DirectionKeys.None;
             bool isRoad = false;
@@ -124,46 +74,46 @@ namespace Program.ManagedObjects.Protagonists
                 else if ((PressedKeys & DirectionKeys.Down) == DirectionKeys.Down)
                     NewDirection = DirectionKeys.Down;
             }
-
-            if (CurrentDirection != NewDirection && NewDirection != DirectionKeys.None) //change the direction of watching
-            {
-                Animation newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);   //default
-                switch (NewDirection)
-                {
-                    case DirectionKeys.Left:
-                        isRoad = Grid[((int)Math.Ceiling((decimal)Animation.Location.X / (decimal)Coordinate.Multiplier) - 1), Animation.Location.Y / Coordinate.Multiplier];
-                        if (isRoad)
-                            newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanLeft);
-                        break;
-                    case DirectionKeys.Right:
-                        isRoad = Grid[((int)((decimal)Animation.Location.X / (decimal)Coordinate.Multiplier) + 1), Animation.Location.Y / Coordinate.Multiplier];
-                        if (isRoad)
-                            newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);
-                        break;
-                    case DirectionKeys.Up:
-                        isRoad = Grid[Animation.Location.X / Coordinate.Multiplier, ((int)Math.Ceiling((decimal)Animation.Location.Y / (decimal)Coordinate.Multiplier) - 1)];
-                        if (isRoad)
-                            newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanUp);
-                        break;
-                    default:
-                        isRoad = Grid[Animation.Location.X / Coordinate.Multiplier, ((int)((decimal)Animation.Location.Y / (decimal)Coordinate.Multiplier) + 1)];
-                        if (isRoad)
-                            newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanDown);
-                        break;
-                }
-                if (isRoad)
-                {
-                    newAnimation.Location = Animation.Location;
-                    Animation = newAnimation;
-                    CurrentDirection = NewDirection;
-                }
-            }
-
-            if (Animation.Location.X  > 0 &&
-                Animation.Location.X  < Coordinate.WorldWidth - Coordinate.Multiplier &&
+            if (Animation.Location.X > 0 &&
+                Animation.Location.X < Coordinate.WorldWidth - Coordinate.Multiplier &&
                 Animation.Location.Y > 0 &&
-                Animation.Location.Y  < Coordinate.WorldHeight - Coordinate.Multiplier)
+                Animation.Location.Y < Coordinate.WorldHeight - Coordinate.Multiplier)
             {
+                    if (CurrentDirection != NewDirection && NewDirection != DirectionKeys.None) //change the direction of watching
+                {
+                    Animation newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);   //default
+                    switch (NewDirection)
+                    {
+                        case DirectionKeys.Left:
+                            isRoad = Grid[((int)Math.Ceiling((decimal)Animation.Location.X / (decimal)Coordinate.Multiplier) - 1), Animation.Location.Y / Coordinate.Multiplier];
+                            if (isRoad)
+                                newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanLeft);
+                            break;
+                        case DirectionKeys.Right:
+                            isRoad = Grid[((int)((decimal)Animation.Location.X / (decimal)Coordinate.Multiplier) + 1), Animation.Location.Y / Coordinate.Multiplier];
+                            if (isRoad)
+                                newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanRight);
+                            break;
+                        case DirectionKeys.Up:
+                            isRoad = Grid[Animation.Location.X / Coordinate.Multiplier, ((int)Math.Ceiling((decimal)Animation.Location.Y / (decimal)Coordinate.Multiplier) - 1)];
+                            if (isRoad)
+                                newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanUp);
+                            break;
+                        default:
+                            isRoad = Grid[Animation.Location.X / Coordinate.Multiplier, ((int)((decimal)Animation.Location.Y / (decimal)Coordinate.Multiplier) + 1)];
+                            if (isRoad)
+                                newAnimation = AnimationFactory.CreateAnimation(AnimationType.PacmanDown);
+                            break;
+                    }
+                    if (isRoad)
+                    {
+                        newAnimation.Location = Animation.Location;
+                        Animation = newAnimation;
+                        CurrentDirection = NewDirection;
+                    }
+                }
+
+            
                 switch (CurrentDirection)   //change the direction of going
                 {
                     case DirectionKeys.Left:
@@ -193,13 +143,36 @@ namespace Program.ManagedObjects.Protagonists
             {
                 //cross the walls on x coordinates
                 if ((Animation.Location.X == 0) && (CurrentDirection == DirectionKeys.Left))
-                    Animation.Location = new Coordinate(21 * Coordinate.Multiplier, Animation.Location.Y);
-                else if ((Animation.Location.X == 21 * Coordinate.Multiplier) && (CurrentDirection == DirectionKeys.Right))
+                {
+                    Animation.Location = new Coordinate(Coordinate.WorldWidth, Animation.Location.Y);
+                }
+                else if ((Animation.Location.X == Coordinate.WorldWidth) && (CurrentDirection == DirectionKeys.Right))
+                {
                     Animation.Location = new Coordinate(0, Animation.Location.Y);
-                else if (Animation.AnimationType == AnimationType.PacmanRight) Animation.Location += new Coordinate(speed, 0);
-                else if (Animation.AnimationType == AnimationType.PacmanLeft) Animation.Location -= new Coordinate(speed, 0);
+                }
+                else if (Animation.AnimationType == AnimationType.PacmanRight)
+                {
+                    Animation.Location += new Coordinate(speed, 0);
+                }
+                else if (Animation.AnimationType == AnimationType.PacmanLeft)
+                {
+                    Animation.Location -= new Coordinate(speed, 0);
+                }
             }
-            #endregion
         }
+
+        public void CheckTimer()
+        {
+            if (CoinTimerOn)
+                CoinTimer += 1;
+
+            if (CoinTimer == 240)
+            {
+                CoinTimerOn = false;
+                CoinTimer = 0;
+                Master.Instance.isPacmanEatBigCoin(CoinTimerOn);
+            }
+        }
+
     }
 }

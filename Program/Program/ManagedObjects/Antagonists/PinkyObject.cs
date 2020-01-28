@@ -76,7 +76,7 @@ namespace Program.ManagedObjects.Antagonists
                 return pacmanLocation;
             }
         }
-        protected override Coordinate GetTargetCoordinate2(Coordinate pacmanLocation, Coordinate blinkyLocation)
+        protected override Coordinate GetTargetCoordinateInky(Coordinate pacmanLocation, Coordinate blinkyLocation)
         {
             return new Coordinate(0, 0);
         }

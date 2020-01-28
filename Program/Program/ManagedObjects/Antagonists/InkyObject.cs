@@ -59,7 +59,7 @@ namespace Program.ManagedObjects.Antagonists
 
         }
 
-        protected override Coordinate GetTargetCoordinate2(Coordinate pacmanLocation, Coordinate blinkyLocation)
+        protected override Coordinate GetTargetCoordinateInky(Coordinate pacmanLocation, Coordinate blinkyLocation)
         {
             var pacmanDirection = Master.Instance.PacmanDirection;
             var blinkyDirection = Master.Instance.BlinkyDirection;

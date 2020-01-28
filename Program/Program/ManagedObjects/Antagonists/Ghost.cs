@@ -10,27 +10,26 @@ namespace Program.ManagedObjects.Antagonists
     abstract class Ghost : BaseGameObject
     {
         protected enum Direction { up, down, left, right }
-        protected enum GhostState { Regular, BlueGhost, Eyes }
+        public enum GhostState { Regular, BlueGhost, Eyes }
 
-        public float Speed { get; set; } = Coordinate.Multiplier / 10;
+ 
         private const int RegularGhostSpeed = Coordinate.Multiplier / 20;
         private const int BlueGhostSpeed = Coordinate.Multiplier / 10;
         private const int EyesSpeed = Coordinate.Multiplier / 10;
-        private readonly int speed = RegularGhostSpeed;
-
 
         protected Coordinate step;
         protected Direction currentDirection = Direction.down;
-        protected GhostState currentState = GhostState.Regular;
+        public GhostState currentState = GhostState.Regular;
 
         public Coordinate pacmanCoord;
+
         //private bool alive;
         //private static List<Animation> changedAnimations;
 
         protected abstract Animation GetAnimation();
 
-        protected abstract Coordinate GetTargetCoordinate(Coordinate pacmanLocation);  // { return pacmanCoord; }
-        protected abstract Coordinate GetTargetCoordinate2(Coordinate pacmanLocation, Coordinate blinkyLocation);
+        protected abstract Coordinate GetTargetCoordinate(Coordinate pacmanLocation);
+        protected abstract Coordinate GetTargetCoordinateInky(Coordinate pacmanLocation, Coordinate blinkyLocation);
 
         public Ghost(int x, int y, string name, AnimationType? animationType) : base(x, y, name, animationType)
         {
@@ -55,7 +54,7 @@ namespace Program.ManagedObjects.Antagonists
                 Coordinate target;
 
                 if (Name == ObjectsNames.Inky)
-                    target = GetTargetCoordinate2(Master.Instance.PacmanLocation, Master.Instance.BlinkyLocation); 
+                    target = GetTargetCoordinateInky(Master.Instance.PacmanLocation, Master.Instance.BlinkyLocation); 
                 else
                     target = GetTargetCoordinate(Master.Instance.PacmanLocation);
 

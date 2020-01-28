@@ -113,6 +113,16 @@ namespace Program.UnmanagedSources
             else if (targetPosition.Y < 0)
                 targetPosition.Y = 0;
 
+            if (currentPosition.X > Coordinate.WorldWidth - Coordinate.Multiplier)
+                currentPosition.X = Coordinate.WorldWidth - Coordinate.Multiplier;
+            else if (currentPosition.X < 0)
+                currentPosition.X = 0;
+
+            if (currentPosition.Y > Coordinate.WorldHeight - Coordinate.Multiplier)
+                currentPosition.Y = Coordinate.WorldHeight - Coordinate.Multiplier;
+            else if (currentPosition.Y < 0)
+                currentPosition.Y = 0;
+
 
             var finish = squares.Single(sq => sq.X == targetPosition.X / Coordinate.Multiplier && sq.Y == targetPosition.Y / Coordinate.Multiplier);
             var start = squares.Single(sq => sq.X == currentPosition.X / Coordinate.Multiplier && sq.Y == currentPosition.Y / Coordinate.Multiplier);
