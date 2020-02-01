@@ -13,9 +13,9 @@ namespace Program.ManagedObjects.Antagonists
         public enum GhostState { Regular, BlueGhost, Eyes }
 
  
-        private const int RegularGhostSpeed = Coordinate.Multiplier / 20;
-        private const int BlueGhostSpeed = Coordinate.Multiplier / 20;
-        private const int EyesSpeed = Coordinate.Multiplier / 8;
+        private const int RegularGhostSpeed = Coordinate.Multiplier / 16;   //16
+        private const int BlueGhostSpeed = Coordinate.Multiplier / 20;      //20
+        private const int EyesSpeed = Coordinate.Multiplier / 8;            //8
 
         protected Coordinate step;
 
@@ -28,16 +28,10 @@ namespace Program.ManagedObjects.Antagonists
         protected abstract Animation GetAnimation();
 
         protected abstract Coordinate GetTargetCoordinate(Coordinate pacmanLocation);
-        protected abstract Coordinate GetTargetCoordinateInky(Coordinate pacmanLocation, Coordinate blinkyLocation);
 
         public Ghost(int x, int y, string name, AnimationType? animationType) : base(x, y, name, animationType)
         {
-            GhostsHome.Add(new Coordinate(9 * Coordinate.Multiplier, 12 * Coordinate.Multiplier));
-            GhostsHome.Add(new Coordinate(10 * Coordinate.Multiplier, 12 * Coordinate.Multiplier));
-            GhostsHome.Add(new Coordinate(11 * Coordinate.Multiplier, 12 * Coordinate.Multiplier));
-            GhostsHome.Add(new Coordinate(9 * Coordinate.Multiplier, 13 * Coordinate.Multiplier));
-            GhostsHome.Add(new Coordinate(10 * Coordinate.Multiplier, 13 * Coordinate.Multiplier));
-            GhostsHome.Add(new Coordinate(11 * Coordinate.Multiplier, 13 * Coordinate.Multiplier));
+            GhostsHome.AddRange(new Coordinate[] { CoordinateExtension.BlinkyHome, CoordinateExtension.InkyHome, CoordinateExtension.PinkyHome, CoordinateExtension.ClydeHome });
         }     
 
         public void Collide(IEnumerable<IGameObject> collisions)
@@ -73,21 +67,23 @@ namespace Program.ManagedObjects.Antagonists
                 if (currentState == GhostState.Regular)
                 {
                     if (Name == ObjectsNames.Inky)
-                        target = GetTargetCoordinateInky(Master.Instance.PacmanLocation, Master.Instance.BlinkyLocation);
+                        target = (this as InkyObject).GetTargetCoordinateTwoObjects(Master.Instance.PacmanLocation, Master.Instance.BlinkyLocation);
+                    else if (Name == ObjectsNames.Clyde)
+                        target = (this as ClydeObject).CheckTargetForClyde(Master.Instance.PacmanLocation);
                     else
-                        target = GetTargetCoordinate(Master.Instance.PacmanLocation);
-
-                    if (Name == ObjectsNames.Clyde)
-                        target = CheckTargetForClyde(target);
+                        target = GetTargetCoordinate(Master.Instance.PacmanLocation);    
                 }
                 else
                 {
                     if (currentState == GhostState.Eyes)
                     {
-                        var Loc = new Coordinate(Animation.Location.X, Animation.Location.Y);
-                        if (GhostsHome.Contains(Loc))
-                            currentState = GhostState.Regular;
+                        var ghostLoc = new Coordinate(Animation.Location.X, Animation.Location.Y);
 
+                        if (GhostsHome.Contains(ghostLoc))
+                        {
+                            currentState = GhostState.Regular;
+                            Master.Instance.currentGhostState = GhostState.Regular;
+                        }
                     }
 
                     switch(Name)
@@ -215,19 +211,6 @@ namespace Program.ManagedObjects.Antagonists
             return res;
         }
 
-        public Coordinate CheckTargetForClyde(Coordinate target)
-        {
-            Coordinate result;
-
-            if ((Math.Abs(Animation.Location.X - target.X) < 8 * Coordinate.Multiplier) && (Math.Abs(Animation.Location.Y - target.Y) < 8 * Coordinate.Multiplier))
-            {
-                result = new Coordinate(Coordinate.Multiplier, Coordinate.Multiplier * 25);
-            }
-            else
-            {
-                result = target;
-            }
-            return result;
-        }
+        
     }
 }

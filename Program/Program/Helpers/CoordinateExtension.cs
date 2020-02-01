@@ -14,5 +14,12 @@ namespace Program
         public static bool isRoundAll(this Coordinate coord) => isRoundX(coord) && isRoundY(coord);
 
         public static Coordinate MessagePosition = new Coordinate(10 * Coordinate.Multiplier, 13 * Coordinate.Multiplier);
+
+
+        public static Coordinate BlinkyHome = new Coordinate(10 * Coordinate.Multiplier, 12 * Coordinate.Multiplier);
+        public static Coordinate PinkyHome = new Coordinate(9 * Coordinate.Multiplier, 13 * Coordinate.Multiplier);
+        public static Coordinate InkyHome = new Coordinate(10 * Coordinate.Multiplier, 13 * Coordinate.Multiplier);
+        public static Coordinate ClydeHome = new Coordinate(11 * Coordinate.Multiplier, 13 * Coordinate.Multiplier);
+
     }
 }

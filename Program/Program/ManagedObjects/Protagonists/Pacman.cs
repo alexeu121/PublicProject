@@ -12,14 +12,14 @@ namespace Program.ManagedObjects.Protagonists
     {
         private DirectionKeys CurrentDirection = DirectionKeys.Up;
 
-        protected readonly int speed = Coordinate.Multiplier / 10;
-        private bool alive = true;
-        private Coordinate step;
+        protected readonly int speed = Coordinate.Multiplier / 10;  //10
 
+        private int MessageTimer;
+        public bool isMessageTimerOn;
         private int CoinTimer;
         private bool CoinTimerOn;
-
-        public Master master;
+        private int WinnerTimer;
+        public bool isWin;
 
         private bool[,] Grid = new bool[Coordinate.WorldWidth / Coordinate.Multiplier, Coordinate.WorldHeight / Coordinate.Multiplier];
 
@@ -49,39 +49,33 @@ namespace Program.ManagedObjects.Protagonists
                    obj.Name == ObjectsNames.Inky ||
                    obj.Name == ObjectsNames.Clyde))
                 {
-                    if (CoinTimerOn)
-                        Master.Instance.isPacmanEatGhost(obj.Name);
-                    else
+                    if (CoinTimerOn && Master.Instance.currentGhostState == Ghost.GhostState.BlueGhost)
                     {
-                        var deathAnim = AnimationFactory.CreateAnimation(AnimationType.PacmanDeathUp);
-                        Coordinate loc = Animation.Location;
-                        Animation = deathAnim;
-                        Animation.Location = loc;
-                        Master.Instance.isPacmanDeath();
-
+                        Master.Instance.isPacmanEatGhost(obj.Name);
                     }
-
+                    else if (Master.Instance.currentGhostState == Ghost.GhostState.Regular)
+                    {
+                        Master.Instance.isPacmanDeath();
+                    }
                 }
-
             }
-            
         }
-
 
         public override void Update()
         {
-            CheckTimer();
-            
+            bool isRoad = false;
+
+            CheckTimerAndMessage();
+
+            Master.Instance.CheckWinShow(isWin, WinnerTimer);
 
             DirectionKeys NewDirection = DirectionKeys.None;
-            bool isRoad = false;
 
             //find new pressed key of direction
             if ((Animation.Location.X % Coordinate.Multiplier == 0) && (Animation.Location.Y % Coordinate.Multiplier == 0))
             {
 
                 Master.Instance.CheckCoins();
-
 
                 if ((PressedKeys & DirectionKeys.Left) == DirectionKeys.Left)
                     NewDirection = DirectionKeys.Left;
@@ -131,7 +125,6 @@ namespace Program.ManagedObjects.Protagonists
                     }
                 }
 
-            
                 switch (CurrentDirection)   //change the direction of going
                 {
                     case DirectionKeys.Left:
@@ -179,18 +172,40 @@ namespace Program.ManagedObjects.Protagonists
             }
         }
 
-        public void CheckTimer()
+        public void CheckTimerAndMessage()
         {
             if (CoinTimerOn)
                 CoinTimer += 1;
 
-            if (CoinTimer == 600)
+            if (CoinTimer == 480)   //8 sec
             {
                 CoinTimerOn = false;
                 CoinTimer = 0;
                 Master.Instance.isPacmanEatBigCoin(CoinTimerOn);
             }
+
+            if (isMessageTimerOn)
+                MessageTimer += 1;
+
+            if (MessageTimer == 300)   //5 sec
+            {
+                isMessageTimerOn = false;
+                MessageTimer = 0;
+                Master.Instance.offMessage(isMessageTimerOn);
+            }
+
+            if (isWin)
+                WinnerTimer += 1;
+
+            if (WinnerTimer == 300)
+            {
+                isWin = false;
+                WinnerTimer = 0;
+            }
+
         }
+
+
 
     }
 }

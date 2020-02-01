@@ -59,15 +59,11 @@ namespace Program.ManagedObjects.Antagonists
 
         protected override Coordinate GetTargetCoordinate(Coordinate pacmanLocation)
         {
-            var x = pacmanLocation.X / Coordinate.Multiplier;
-            var y = pacmanLocation.Y / Coordinate.Multiplier;
+            var x = pacmanLocation.X;
+            var y = pacmanLocation.Y;
 
-            return new Coordinate(x * Coordinate.Multiplier, y * Coordinate.Multiplier);
+            return pacmanLocation;
         }
 
-        protected override Coordinate GetTargetCoordinateInky(Coordinate pacmanLocation, Coordinate blinkyLocation)
-        {
-            return new Coordinate(0, 0);
-        }
     }
 }

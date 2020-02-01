@@ -18,7 +18,10 @@ namespace Program.UnmanagedSources
         public static Master Instance { get; private set; }
 
         public bool IsEnabled { get { return true; } set { } }
-        //public bool PacmanCoinTimerOn;
+        public Ghost.GhostState currentGhostState = Ghost.GhostState.Regular;
+
+        Animation mazeWhite = AnimationFactory.CreateAnimation(AnimationType.MazeWhite);
+        Animation mazeBlue = AnimationFactory.CreateAnimation(AnimationType.MazeBlue);
 
         private readonly Pacman pacman;
         private readonly BaseGameObject message;
@@ -75,57 +78,6 @@ namespace Program.UnmanagedSources
             }
         }
 
-        public void isPacmanEatBigCoin(bool CoinTimerOn)
-        {
-            var mazeWhite = AnimationFactory.CreateAnimation(AnimationType.MazeWhite);
-            var mazeBlue = AnimationFactory.CreateAnimation(AnimationType.MazeBlue);
-
-            if (CoinTimerOn)
-            {
-                foreach (var obj in Instance.ghosts)
-                { (obj as Ghost).SetBlueState();  }
-
-                Instance.backgrounds.Animation = mazeWhite;
-            }
-            else
-            {
-                foreach (var obj in Instance.ghosts)
-                { (obj as Ghost).SetRegularState(); }
-                Instance.backgrounds.Animation = mazeBlue;
-
-            }
-        }
-
-        public void isPacmanEatGhost(string ghostName)
-        {
-            (Instance.ghosts.Where(x => x.Name == ghostName).First() as Ghost).setGhostToHome();
-        }
-
-        public void isPacmanDeath()
-        {
-            Instance.message.Animation = AnimationFactory.CreateAnimation(AnimationType.MessageLose);
-            Instance.message.Animation.Location = CoordinateExtension.MessagePosition;
-            Instance.message.IsEnabled = true;
-
-           // Instance.pacman.Reset();
-        }
-
-        public bool CheckCoins()
-        {
-            if (Instance.coins.Where(x => x.IsEnabled == true).Count() == 0)
-            {
-                Instance.message.IsEnabled = true;
-            }
-            return true;
-        }
-
-        public void Initialize(IEnumerable<BaseGameObject> gameObjects)
-        {
-            Instance = new Master(gameObjects);
-            Instance.message.Animation.Location = CoordinateExtension.MessagePosition;
-            Instance.message.IsEnabled = false;
-        }
-
         public Master(IEnumerable<BaseGameObject> gameObjects)
         {
             message = gameObjects.Where(x => x.Name == ObjectsNames.Master).First();
@@ -135,9 +87,124 @@ namespace Program.UnmanagedSources
             coins = gameObjects.Where(x => x.Name == ObjectsNames.BigCoin || x.Name == ObjectsNames.SmallCoin).ToArray();
         }
 
+        public void Initialize(IEnumerable<BaseGameObject> gameObjects)
+        {
+            Instance = new Master(gameObjects);
+            Instance.message.Animation.Location = CoordinateExtension.MessagePosition;
+            Instance.message.IsEnabled = false;
+        }
 
 
+        public void isPacmanEatBigCoin(bool CoinTimerOn)
+        {
+            if (CoinTimerOn)
+            {
+                foreach (var obj in ghosts)
+                {
+                    (obj as Ghost).SetBlueState();
+                }
+                currentGhostState = Ghost.GhostState.BlueGhost;
+                Instance.backgrounds.Animation = mazeWhite;
+            }
+            else
+            {
+                foreach (var obj in ghosts)
+                {
+                    (obj as Ghost).SetRegularState();
+                }
+                Instance.backgrounds.Animation = mazeBlue;
+
+            }
+        }
+
+        public void isPacmanEatGhost(string ghostName)
+        {
+            if ((ghosts.Where(x => x.Name == ghostName).First() as Ghost).currentState != Ghost.GhostState.Regular)
+            {
+                (Instance.ghosts.Where(x => x.Name == ghostName).First() as Ghost).setGhostToHome();
+            }
+
+            
+        }
+
+        public void isPacmanDeath()
+        {
+            Animation deathAnim = CompareDirection();
+            Coordinate loc = PacmanLocation;
+            Animation = deathAnim;
+            Animation.Location = loc;
+            Instance.pacman.isMessageTimerOn = true;
+
+            Instance.message.Animation = AnimationFactory.CreateAnimation(AnimationType.MessageLose);
+            Instance.message.Animation.Location = CoordinateExtension.MessagePosition;
+            Instance.message.IsEnabled = true;
+
+            foreach (var obj in Instance.coins)
+            { obj.Reset(); }
+            foreach (var obj in Instance.ghosts)
+            { obj.Reset(); }
+            Instance.pacman.Reset();
+            Instance.backgrounds.Animation = mazeBlue;
+
+        }
+
+        public void offMessage(bool isMessageOn)
+        {
+            if (!isMessageOn)
+            {
+                Instance.message.IsEnabled = false;
+            }
+        }
+
+        public bool CheckCoins()
+        {
+            if (Instance.coins.Where(x => x.IsEnabled == true).Count() == 0)
+            {
+                Instance.message.Animation = AnimationFactory.CreateAnimation(AnimationType.MessageWin);
+                Instance.message.Animation.Location = CoordinateExtension.MessagePosition;
+                Instance.message.IsEnabled = true;
+
+                pacman.isWin = true;
+            }
+            return true;
+        }
+
+        public void CheckWinShow(bool isWinner, int winTimer)
+        {
+            if (isWinner && winTimer == 299)
+            {
+                foreach (var obj in Instance.coins)
+                { obj.Reset(); }
+                foreach (var obj in Instance.ghosts)
+                { obj.Reset(); }
+                Instance.pacman.Reset();
+                offMessage(false);
+
+            }
+
+            if (winTimer == 30 || winTimer == 90 || winTimer == 150 || winTimer == 210 || winTimer == 270 )
+                Instance.backgrounds.Animation = mazeWhite; 
+            else if (winTimer == 60|| winTimer == 120 || winTimer == 180 || winTimer == 240)
+                Instance.backgrounds.Animation = mazeBlue;
+        }
+
+        private Animation CompareDirection()
+        {
+            switch (pacman.Animation.AnimationType)
+            {
+                case AnimationType.PacmanDown:
+                    return AnimationFactory.CreateAnimation(AnimationType.PacmanDeathDown);
+                case AnimationType.PacmanUp:
+                    return AnimationFactory.CreateAnimation(AnimationType.PacmanDeathUp);
+                case AnimationType.PacmanLeft:
+                    return AnimationFactory.CreateAnimation(AnimationType.PacmanDeathLeft);
+                default:
+                    return AnimationFactory.CreateAnimation(AnimationType.PacmanDeathRight);
+            }
+        }
         public void Update()
-        { }
+        {  }
+
+       
     }
 }

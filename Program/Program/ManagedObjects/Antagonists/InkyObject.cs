@@ -59,7 +59,7 @@ namespace Program.ManagedObjects.Antagonists
 
         }
 
-        protected override Coordinate GetTargetCoordinateInky(Coordinate pacmanLocation, Coordinate blinkyLocation)
+        public Coordinate GetTargetCoordinateTwoObjects(Coordinate pacmanLocation, Coordinate blinkyLocation)
         {
             var pacmanDirection = Master.Instance.PacmanDirection;
             var blinkyDirection = Master.Instance.BlinkyDirection;
@@ -69,17 +69,9 @@ namespace Program.ManagedObjects.Antagonists
             var deltaX = Math.Abs(blinkyLocation.X - pacmanLocationPlus.X);
             var deltaY = Math.Abs(blinkyLocation.Y - pacmanLocationPlus.Y);
 
-
-            Coordinate target = new Coordinate((blinkyLocation.X >= pacmanLocation.X ? (blinkyLocation.X - (deltaX + deltaX)) : (blinkyLocation.X + deltaX + deltaX)),
-                                               (blinkyLocation.Y >= pacmanLocation.Y ? (blinkyLocation.Y - (deltaY + deltaY)) : (blinkyLocation.Y + deltaY + deltaY)));
-
-
-            //Coordinate target = new Coordinate(
-            //    (Coordinate.WorldWidth + (blinkyLocation.X >= pacmanLocation.X ? (blinkyLocation.X - (deltaX + deltaX)) : (blinkyLocation.X + deltaX + deltaX))) / Coordinate.WorldWidth,
-            //    ((Coordinate.WorldHeight + (blinkyLocation.Y >= pacmanLocation.Y ? (blinkyLocation.Y - (deltaY + deltaY)) : (blinkyLocation.Y + deltaY + deltaY))) / Coordinate.WorldHeight));
-
-
-
+            Coordinate target = new Coordinate(
+                (Coordinate.WorldWidth + (blinkyLocation.X >= pacmanLocation.X ? (blinkyLocation.X - (deltaX + deltaX)) : (blinkyLocation.X + deltaX + deltaX))) % Coordinate.WorldWidth,
+                ((Coordinate.WorldHeight + (blinkyLocation.Y >= pacmanLocation.Y ? (blinkyLocation.Y - (deltaY + deltaY)) : (blinkyLocation.Y + deltaY + deltaY))) % Coordinate.WorldHeight));
 
 
             if (PathFinder.isSquareEmpty(target))

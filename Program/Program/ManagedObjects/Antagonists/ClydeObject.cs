@@ -19,8 +19,6 @@ namespace Program.ManagedObjects.Antagonists
         {
             AnimationType animationType = AnimationType.BlueGhost;
 
-            
-
             if (currentState == GhostState.Regular)
             {
                 switch (currentDirection)
@@ -64,14 +62,22 @@ namespace Program.ManagedObjects.Antagonists
 
         protected override Coordinate GetTargetCoordinate(Coordinate pacmanLocation)
         {
-            var x = pacmanLocation.X / Coordinate.Multiplier;
-            var y = pacmanLocation.Y / Coordinate.Multiplier;
-
-            return new Coordinate(x * Coordinate.Multiplier, y * Coordinate.Multiplier);
+            return new Coordinate(pacmanLocation.X, pacmanLocation.Y);
         }
-        protected override Coordinate GetTargetCoordinateInky(Coordinate pacmanLocation, Coordinate blinkyLocation)
+
+        public Coordinate CheckTargetForClyde(Coordinate pacmanLocation)
         {
-            return new Coordinate(0, 0);
+            Coordinate result;
+
+            if ((Math.Abs(Animation.Location.X - pacmanLocation.X) < 8 * Coordinate.Multiplier) && (Math.Abs(Animation.Location.Y - pacmanLocation.Y) < 8 * Coordinate.Multiplier))
+            {
+                result = new Coordinate(Coordinate.Multiplier, Coordinate.Multiplier * 25);
+            }
+            else
+            {
+                result = pacmanLocation;
+            }
+            return result;
         }
     }
 }

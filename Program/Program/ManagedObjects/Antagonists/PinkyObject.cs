@@ -61,12 +61,21 @@ namespace Program.ManagedObjects.Antagonists
         protected override Coordinate GetTargetCoordinate(Coordinate pacmanLocation)
         {
             var pacmanDirection = Master.Instance.PacmanDirection;
+            Coordinate target = new Coordinate(0, 0);
+            if (pacmanDirection.X != 0 && pacmanDirection.Y != -Coordinate.Multiplier)
+            {
+                target = new Coordinate(
+                    (Coordinate.WorldWidth + (pacmanLocation.X + pacmanDirection.X * 4)) % Coordinate.WorldWidth,
+                    ((Coordinate.WorldHeight + (pacmanLocation.Y + pacmanDirection.Y * 4)) % Coordinate.WorldHeight));
 
-            Coordinate target = new Coordinate(
-                (Coordinate.WorldWidth + (pacmanLocation.X + pacmanDirection.X * 4)) / Coordinate.WorldWidth,
-                ((Coordinate.WorldHeight + (pacmanLocation.Y + pacmanDirection.Y * 4)) / Coordinate.WorldHeight));
+            }
+            else
+            {
+                target = new Coordinate(
+                    (Coordinate.WorldWidth + (pacmanLocation.X + Coordinate.Multiplier * 4)) % Coordinate.WorldWidth,
+                    ((Coordinate.WorldHeight + (pacmanLocation.Y + pacmanDirection.Y * 4)) % Coordinate.WorldHeight));
+            }
 
-          
             if (PathFinder.isSquareEmpty(target))
             {
                 return target;
@@ -76,10 +85,5 @@ namespace Program.ManagedObjects.Antagonists
                 return pacmanLocation;
             }
         }
-        protected override Coordinate GetTargetCoordinateInky(Coordinate pacmanLocation, Coordinate blinkyLocation)
-        {
-            return new Coordinate(0, 0);
-        }
-
     }
 }
