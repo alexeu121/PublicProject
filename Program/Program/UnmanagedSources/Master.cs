@@ -18,7 +18,6 @@ namespace Program.UnmanagedSources
         public static Master Instance { get; private set; }
 
         public bool IsEnabled { get { return true; } set { } }
-        public Ghost.GhostState currentGhostState = Ghost.GhostState.Regular;
 
         Animation mazeWhite = AnimationFactory.CreateAnimation(AnimationType.MazeWhite);
         Animation mazeBlue = AnimationFactory.CreateAnimation(AnimationType.MazeBlue);
@@ -103,7 +102,9 @@ namespace Program.UnmanagedSources
                 {
                     (obj as Ghost).SetBlueState();
                 }
-                currentGhostState = Ghost.GhostState.BlueGhost;
+
+                
+                //currentGhostState = Ghost.GhostState.BlueGhost;
                 Instance.backgrounds.Animation = mazeWhite;
             }
             else

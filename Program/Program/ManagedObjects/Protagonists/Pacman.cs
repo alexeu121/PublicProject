@@ -49,11 +49,11 @@ namespace Program.ManagedObjects.Protagonists
                    obj.Name == ObjectsNames.Inky ||
                    obj.Name == ObjectsNames.Clyde))
                 {
-                    if (CoinTimerOn && Master.Instance.currentGhostState == Ghost.GhostState.BlueGhost)
+                    if (CoinTimerOn && (obj as Ghost).currentState == Ghost.GhostState.BlueGhost)
                     {
                         Master.Instance.isPacmanEatGhost(obj.Name);
                     }
-                    else if (Master.Instance.currentGhostState == Ghost.GhostState.Regular)
+                    else if ((obj as Ghost).currentState == Ghost.GhostState.Regular)
                     {
                         Master.Instance.isPacmanDeath();
                     }

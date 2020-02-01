@@ -82,7 +82,7 @@ namespace Program.ManagedObjects.Antagonists
                         if (GhostsHome.Contains(ghostLoc))
                         {
                             currentState = GhostState.Regular;
-                            Master.Instance.currentGhostState = GhostState.Regular;
+                           // Master.Instance.currentGhostState = GhostState.Regular;
                         }
                     }
 
