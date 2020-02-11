@@ -48,13 +48,14 @@ namespace Program.ManagedObjects.Protagonists
                    obj.Name == ObjectsNames.Blinky ||
                    obj.Name == ObjectsNames.Inky ||
                    obj.Name == ObjectsNames.Clyde))
-                {
+                 {
                     if (CoinTimerOn && (obj as Ghost).currentState == Ghost.GhostState.BlueGhost)
                     {
                         Master.Instance.isPacmanEatGhost(obj.Name);
                     }
                     else if ((obj as Ghost).currentState == Ghost.GhostState.Regular)
                     {
+                        Master.Instance.deathAnim = true;
                         Master.Instance.isPacmanDeath();
                     }
                 }
@@ -175,7 +176,7 @@ namespace Program.ManagedObjects.Protagonists
         public void CheckTimerAndMessage()
         {
             if (CoinTimerOn)
-                CoinTimer += 1;
+                CoinTimer++;
 
             if (CoinTimer == 480)   //8 sec
             {
@@ -185,7 +186,7 @@ namespace Program.ManagedObjects.Protagonists
             }
 
             if (isMessageTimerOn)
-                MessageTimer += 1;
+                MessageTimer++;
 
             if (MessageTimer == 300)   //5 sec
             {
@@ -195,17 +196,13 @@ namespace Program.ManagedObjects.Protagonists
             }
 
             if (isWin)
-                WinnerTimer += 1;
+                WinnerTimer++;
 
             if (WinnerTimer == 300)
             {
                 isWin = false;
                 WinnerTimer = 0;
             }
-
         }
-
-
-
     }
 }

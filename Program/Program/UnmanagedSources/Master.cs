@@ -22,6 +22,9 @@ namespace Program.UnmanagedSources
         Animation mazeWhite = AnimationFactory.CreateAnimation(AnimationType.MazeWhite);
         Animation mazeBlue = AnimationFactory.CreateAnimation(AnimationType.MazeBlue);
 
+        public bool deathAnim = false;
+        public int deathDelay = 0;
+
         private readonly Pacman pacman;
         private readonly BaseGameObject message;
         private readonly BaseGameObject[] ghosts;
@@ -102,9 +105,6 @@ namespace Program.UnmanagedSources
                 {
                     (obj as Ghost).SetBlueState();
                 }
-
-                
-                //currentGhostState = Ghost.GhostState.BlueGhost;
                 Instance.backgrounds.Animation = mazeWhite;
             }
             else
@@ -124,29 +124,42 @@ namespace Program.UnmanagedSources
             {
                 (Instance.ghosts.Where(x => x.Name == ghostName).First() as Ghost).setGhostToHome();
             }
-
-            
         }
 
         public void isPacmanDeath()
         {
-            Animation deathAnim = CompareDirection();
+            Animation deathAnimation = CompareDirection();
             Coordinate loc = PacmanLocation;
-            Animation = deathAnim;
+            Animation = deathAnimation;
             Animation.Location = loc;
+
             Instance.pacman.isMessageTimerOn = true;
 
             Instance.message.Animation = AnimationFactory.CreateAnimation(AnimationType.MessageLose);
             Instance.message.Animation.Location = CoordinateExtension.MessagePosition;
             Instance.message.IsEnabled = true;
 
-            foreach (var obj in Instance.coins)
-            { obj.Reset(); }
-            foreach (var obj in Instance.ghosts)
-            { obj.Reset(); }
-            Instance.pacman.Reset();
-            Instance.backgrounds.Animation = mazeBlue;
+            DeathAnimDelay();
 
+            if (!deathAnim)
+            {
+                foreach (var obj in Instance.coins)
+                { obj.Reset(); }
+                foreach (var obj in Instance.ghosts)
+                { obj.Reset(); }
+                Instance.pacman.Reset();
+                Instance.backgrounds.Animation = mazeBlue;
+            }
+
+        }
+
+        public void DeathAnimDelay()
+        {
+            if (deathAnim)
+                deathDelay++;
+
+            if (deathDelay == 120)
+                deathAnim = false;
         }
 
         public void offMessage(bool isMessageOn)
@@ -204,7 +217,9 @@ namespace Program.UnmanagedSources
             }
         }
         public void Update()
-        {  }
+        {
+           
+        }
 
        
     }
