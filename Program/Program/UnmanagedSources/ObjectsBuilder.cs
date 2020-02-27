@@ -16,7 +16,7 @@ namespace Program
     {
         public static string mazeData;
 
-        public static List<BaseGameObject> PrepareObjects()
+        public static List<BaseGameObject> BuildObjects()
         {
             mazeData = ConfigurationManager.AppSettings["MazeData"];
 

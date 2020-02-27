@@ -66,16 +66,15 @@ namespace Program.ManagedObjects.Protagonists
         {
             bool isRoad = false;
 
-            CheckTimerAndMessage();
+            CheckTimerAndMessage();     //need move to master
 
-            Master.Instance.CheckWinShow(isWin, WinnerTimer);
+            Master.Instance.CheckWinShow(isWin, WinnerTimer);   //need move to master
 
             DirectionKeys NewDirection = DirectionKeys.None;
 
             //find new pressed key of direction
             if ((Animation.Location.X % Coordinate.Multiplier == 0) && (Animation.Location.Y % Coordinate.Multiplier == 0))
             {
-
                 Master.Instance.CheckCoins();
 
                 if ((PressedKeys & DirectionKeys.Left) == DirectionKeys.Left)
@@ -173,7 +172,7 @@ namespace Program.ManagedObjects.Protagonists
             }
         }
 
-        public void CheckTimerAndMessage()
+        public void CheckTimerAndMessage()      //need move to master
         {
             if (CoinTimerOn)
                 CoinTimer++;

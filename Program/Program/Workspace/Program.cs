@@ -15,7 +15,7 @@ namespace Program.Workspace
     {
         static void Main(string[] args)
         {
-            var objects = ObjectsBuilder.PrepareObjects();
+            var objects = ObjectsBuilder.BuildObjects();
 
             Engine.Run(objects);
         }
